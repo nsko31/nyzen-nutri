@@ -1,12 +1,6 @@
 
-const CACHE_NAME = "nyzen-nutri-v2";
-
-const FILES = [
-  "./",
-  "./index.html",
-  "./manifest.webmanifest",
-  "./icon.svg"
-];
+const CACHE_NAME = "nyzen-nutri-v3";
+const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", event => {
   event.waitUntil(
@@ -19,8 +13,7 @@ self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
       )
     )
   );
@@ -29,9 +22,7 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
-
   const url = new URL(event.request.url);
-
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
@@ -39,9 +30,7 @@ self.addEventListener("fetch", event => {
       .then(response => {
         if (response && response.ok) {
           const copy = response.clone();
-          caches.open(CACHE_NAME).then(cache =>
-            cache.put(event.request, copy)
-          );
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         }
         return response;
       })
