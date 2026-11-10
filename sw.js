@@ -1,6 +1,7 @@
 
-const CACHE_NAME = "nyzen-nutri-v4";
-const ASSETS = [
+const CACHE_NAME = "nyzen-nutri-v2";
+
+const FILES = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
@@ -9,7 +10,7 @@ const ASSETS = [
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES))
   );
   self.skipWaiting();
 });
@@ -29,11 +30,14 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
 
+  const url = new URL(event.request.url);
+
+  if (url.origin !== self.location.origin) return;
+
   event.respondWith(
     fetch(event.request)
       .then(response => {
-        if (response && response.status === 200 &&
-            new URL(event.request.url).origin === self.location.origin) {
+        if (response && response.ok) {
           const copy = response.clone();
           caches.open(CACHE_NAME).then(cache =>
             cache.put(event.request, copy)
@@ -41,8 +45,10 @@ self.addEventListener("fetch", event => {
         }
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached =>
-        cached || caches.match("./index.html")
-      ))
+      .catch(() =>
+        caches.match(event.request).then(cached =>
+          cached || caches.match("./index.html")
+        )
+      )
   );
 });
