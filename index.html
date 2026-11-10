@@ -663,6 +663,7 @@ function removeFood(i){
  renderAll();
 }
 
+
 function saveTargets(){
  db.targets={
   kcal:number("targetKcal"),
@@ -670,6 +671,87 @@ function saveTargets(){
   carbs:number("targetCarbs"),
   fat:number("targetFat")
  };
+ saveDB();
+ renderAll();
+ alert("Tes repères ont été enregistrés.");
+}
+
+async function searchFood(){
+ const q=$("foodSearch").value.trim();
+ if(!q){
+  alert("Entre le nom d'un aliment.");
+  return;
+ }
+
+ const results=$("searchResults");
+ results.innerHTML='<p class="small">Recherche en cours...</p>';
+
+ try{
+  const params=new URLSearchParams({
+   search_terms:q,
+   search_simple:"1",
+   action:"process",
+   json:"1",
+   page_size:"24",
+   page:"1",
+   lc:"fr",
+   cc:"be",
+   fields:"product_name,brands,product_quantity,product_quantity_unit,serving_size,nutriments,code"
+  });
+
+  const response=await fetch(
+   "https://world.openfoodfacts.org/cgi/search.pl?"+params.toString()
+  );
+
+  if(!response.ok) throw Error("NETWORK");
+
+  const data=await response.json();
+  const products=(data.products||[]).filter(p=>p.product_name);
+
+  const unique=[];
+  const seen=new Set();
+
+  products.forEach(p=>{
+   const key=p.code||p.product_name.toLowerCase();
+   if(!seen.has(key)){
+    seen.add(key);
+    unique.push(p);
+   }
+  });
+
+  window.foundProducts=unique;
+
+  if(!unique.length){
+   results.innerHTML='<div class="empty">Aucun résultat trouvé. Essaie un autre nom ou une autre marque.</div>';
+   return;
+  }
+
+  results.innerHTML=unique.map((p,i)=>{
+   const n=p.nutriments||{};
+   const kcal=Number(n["energy-kcal_100g"]||
+    ((Number(n["energy_100g"])||0)/4.184)||0);
+
+   return `
+    <div class="item">
+     <b>${safe(p.product_name)}</b>
+     <div class="small muted">${safe(p.brands||"Marque non précisée")}</div>
+     <div class="small muted">
+      ${fmt(kcal)} kcal ·
+      P ${fmt(n.proteins_100g)} g ·
+      G ${fmt(n.carbohydrates_100g)} g ·
+      L ${fmt(n.fat_100g)} g / 100 g
+     </div>
+     <button class="btn secondary small" onclick="useProduct(${i})">
+      Utiliser cet aliment
+     </button>
+    </div>`;
+  }).join("");
+
+ }catch(e){
+  results.innerHTML='<div class="notice">Recherche impossible pour le moment. Réessaie dans quelques instants.</div>';
+ }
+}
+;
  saveDB();
  renderAll();
  alert("Tes repères ont été enregistrés.");
