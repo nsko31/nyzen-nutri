@@ -1,218 +1,766 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#090912">
+<meta name="theme-color" content="#090812">
+<meta name="description" content="NYZEN NUTRI — ton suivi nutrition, hydratation et progression.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
 <title>NYZEN NUTRI</title>
+
 <style>
-:root{--bg:#090912;--card:#141421;--card2:#1c1b2b;--line:#302d43;--purple:#a58aff;--pink:#d28cff;--text:#f8f6ff;--muted:#9693aa;--green:#65dfac;--red:#ff8196}
+:root{
+  --bg:#090812;--panel:#131220;--panel2:#1a1829;--line:#29263b;
+  --purple:#9470ff;--purple2:#7148e8;--text:#f6f3ff;--muted:#9691aa;
+  --green:#6fe0ae;--red:#ff7188;--blue:#6ebcff;--orange:#ffbd70;
+  --radius:19px;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:100px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;padding-bottom:100px}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-header{height:66px;padding:0 19px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:sticky;top:0;background:#090912ed;backdrop-filter:blur(15px);z-index:10}
-.logo{font-size:21px;font-weight:950;letter-spacing:2px}.logo span{color:var(--purple)}
-main{max-width:760px;margin:auto;padding:15px}
-.page{display:none}.page.active{display:block}
-h1{font-size:27px;margin:12px 0 5px;letter-spacing:-.7px}
-h2{font-size:17px;margin:0 0 13px}
-h3{font-size:14px;margin:12px 0 8px}
-p{font-size:13px;color:var(--muted);line-height:1.55}
-small,.muted{color:var(--muted)}
-.card{background:linear-gradient(145deg,#191827,#11111b);border:1px solid var(--line);border-radius:19px;padding:17px;margin:12px 0}
-.hero{background:linear-gradient(135deg,#37245d,#1b1530 65%,#21162e);border-color:#554080;padding:21px}
-.hero p{color:#d3c8ed}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-.stat{background:var(--card2);border-radius:15px;padding:13px;min-width:0}
-.stat strong{font-size:22px;display:block;margin:8px 0}
-.stat small{font-size:11px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.btn{border:0;border-radius:12px;background:linear-gradient(120deg,#9874ff,#c079e9);color:white;padding:12px 15px;font-weight:750}
-.btn.secondary{background:#29253d;border:1px solid #413957;color:#e5dcff}
-.btn.danger{background:#482630;color:#ffbdc8}
+.app{max-width:760px;margin:auto;padding:18px 16px 30px}
+.top{display:flex;align-items:center;justify-content:space-between;margin:5px 0 24px}
+.logo{font-weight:900;letter-spacing:2px;font-size:20px}
+.logo span{color:var(--purple)}
+.date{font-size:12px;color:var(--muted);margin-top:5px}
+.avatar{width:42px;height:42px;border-radius:15px;background:#29213f;color:#c8b8ff;display:grid;place-items:center;font-weight:800}
+h1{font-size:27px;margin:8px 0}
+h2{font-size:19px;margin:0 0 15px}
+h3{font-size:15px;margin:0 0 8px}
+p{color:var(--muted);line-height:1.5}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:17px;margin:13px 0}
+.hero{background:linear-gradient(135deg,#21183c,#151323 65%,#11101b);border:1px solid #403064;border-radius:23px;padding:20px;margin:15px 0}
+.hero .eyebrow{color:#c2afff;font-size:11px;font-weight:800;letter-spacing:1.5px}
+.hero h1{font-size:25px;line-height:1.2}
+.hero p{margin-bottom:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.stat{background:var(--panel2);border:1px solid var(--line);padding:13px;border-radius:15px;min-width:0}
+.stat strong{font-size:20px;display:block;margin:5px 0}
+.stat span{font-size:11px;color:var(--muted)}
+.progress{height:8px;background:#29263b;border-radius:20px;overflow:hidden;margin:10px 0 5px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--purple2),#b49aff);border-radius:20px;width:0%}
+.macro{margin:13px 0}
+.macrohead{display:flex;justify-content:space-between;font-size:13px}
+.macro .progress{height:6px}
+.btn{border:0;border-radius:13px;padding:12px 15px;background:var(--purple);color:white;font-weight:800}
+.btn:active{transform:scale(.98)}
+.btn.secondary{background:#29243d;color:#d8ccff;border:1px solid #453967}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+.btn.danger{background:#542536;color:#ffb8c5}
 .btn.full{width:100%}
-.btn.mini{padding:8px 11px;font-size:12px}
-input,select,textarea{width:100%;background:#0b0b14;border:1px solid var(--line);border-radius:11px;padding:12px;color:white;outline:none;min-width:0}
+.btn.smallbtn{padding:8px 11px;font-size:12px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+input,select,textarea{width:100%;background:#0e0d17;border:1px solid #343047;color:var(--text);border-radius:12px;padding:12px;outline:none;margin:6px 0 12px}
 input:focus,select:focus,textarea:focus{border-color:var(--purple)}
-label{font-size:12px;color:var(--muted);display:block;margin:12px 0 6px}
-.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.progress{height:8px;background:#302d40;border-radius:20px;overflow:hidden;margin:10px 0}
-.progress div{height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));width:0%;border-radius:20px;transition:width .3s}
-.pill{font-size:10px;letter-spacing:.5px;padding:6px 9px;border-radius:30px;background:#34284d;color:#d7c8ff}
-.foodrow{padding:12px 0;border-bottom:1px solid var(--line)}
-.foodrow:last-child{border:0}
-.quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.quick button{flex:1;min-width:70px}
-.big{font-size:35px;font-weight:900;color:var(--purple);margin:8px 0}
+label{font-size:12px;color:#c7c1d8;font-weight:700}
+.formrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border:0}
+.item strong{font-size:13px}
+.item small{display:block;color:var(--muted);margin-top:4px}
+.pill{font-size:10px;background:#29223e;color:#c9b8ff;border-radius:20px;padding:5px 8px}
+.section{display:none}
+.section.active{display:block}
+.nav{position:fixed;z-index:20;bottom:0;left:0;right:0;background:rgba(14,13,23,.97);border-top:1px solid var(--line);padding:9px 4px calc(9px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;backdrop-filter:blur(15px)}
+.nav button{border:0;background:transparent;color:#858096;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0;flex:1;padding:5px 0}
+.nav button b{font-size:19px;font-weight:500}
+.nav button.active{color:#bba7ff}
+.nav button.active b{filter:drop-shadow(0 0 7px #9470ff)}
+.notice{background:#211b35;border:1px solid #443565;color:#d9ceff;padding:12px;border-radius:13px;font-size:12px;line-height:1.5}
 .empty{text-align:center;padding:20px;color:var(--muted);font-size:13px}
-nav{position:fixed;bottom:0;left:0;right:0;z-index:20;background:#11111dee;backdrop-filter:blur(18px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 2px calc(9px + env(safe-area-inset-bottom))}
-nav button{background:none;border:0;color:var(--muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
-nav button b{font-size:20px;font-weight:500}
-nav button.active{color:var(--purple)}
-nav button.water-tab{color:#85caff}
-.tagline{font-size:12px;color:var(--muted)}
-canvas{width:100%;height:170px}
-#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:80;background:#302548;padding:12px 18px;border-radius:12px;display:none;font-size:13px;max-width:90%;text-align:center}
-.overlay{position:fixed;inset:0;background:#07070df5;z-index:50;display:none;align-items:center;justify-content:center;padding:13px}
-.modal{background:#171725;border:1px solid #413957;border-radius:23px;padding:20px;width:100%;max-width:500px;max-height:94dvh;overflow:auto}
-.modal h2{font-size:22px;margin:15px 0 7px}
-.step{display:none}.step.active{display:block}
-.stepdots{display:flex;gap:5px;margin:15px 0}
-.stepdots span{height:4px;flex:1;border-radius:5px;background:#39354b}
-.stepdots span.on{background:var(--purple)}
-video{width:100%;border-radius:14px;background:#000}
-@media(min-width:600px){main{padding:22px}.grid.four{grid-template-columns:repeat(4,1fr)}}
+.tag{display:inline-block;background:#242136;padding:6px 9px;border-radius:9px;font-size:11px;color:#c8bbef;margin:3px}
+.hidden{display:none!important}
+.modal{position:fixed;inset:0;background:#05040bdc;z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modalbox{background:#171525;border:1px solid #40375b;border-radius:22px;padding:21px;width:100%;max-width:500px;max-height:90vh;overflow:auto}
+.modalbox h2{margin-bottom:5px}
+.stepdots{display:flex;gap:6px;margin:15px 0}
+.stepdots i{height:4px;border-radius:9px;background:#343047;flex:1}
+.stepdots i.on{background:var(--purple)}
+.toast{position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#28213c;border:1px solid #59468a;padding:12px 17px;border-radius:12px;z-index:100;font-size:13px;display:none;max-width:90%;text-align:center}
+.waterglass{font-size:30px}
+footer{text-align:center;color:#625d73;font-size:10px;padding:20px}
+@media(min-width:650px){.app{padding-top:28px}.hero h1{font-size:30px}}
 </style>
 </head>
+
 <body>
-<header>
- <div class="logo">NYZEN <span>NUTRI</span></div>
- <span class="tagline" id="headerDate"></span>
-</header>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="logo">NYZEN <span>NUTRI</span></div>
+      <div class="date" id="todayLabel"></div>
+    </div>
+    <div class="avatar" id="avatar">N</div>
+  </header>
 
-<main>
-<section class="page active" id="home">
- <div class="card hero">
-  <div class="pill">TON ESPACE PERSONNEL</div>
-  <h1>Construis ta progression.</h1>
-  <p id="welcomeText">Une meilleure routine commence aujourd'hui.</p>
-  <div class="row"><span class="tagline">NYZEN NUTRI V3</span><span>✦</span></div>
- </div>
- <h2>Vue d'ensemble</h2>
- <div class="card">
-  <div class="row"><h2>Calories aujourd'hui</h2><span class="pill">SUIVI</span></div>
-  <div class="grid">
-   <div class="stat"><small>Consommées</small><strong id="dashCal">0</strong><small>kcal enregistrées</small></div>
-   <div class="stat"><small>Objectif défini</small><strong id="dashCalGoal">—</strong><small>kcal / jour</small></div>
-  </div>
-  <div class="progress"><div id="dashCalBar"></div></div>
-  <div class="row"><small id="dashCalPercent">Objectif non défini</small><b id="dashCalRemaining">—</b></div>
-  <p id="calorieGuidance">Tu peux suivre tes repas sans objectif calorique chiffré.</p>
- </div>
- <div class="grid">
-  <div class="stat"><small>Protéines</small><strong id="dashProtein">0 g</strong><small id="dashProteinGoal">apports du jour</small></div>
-  <div class="stat"><small>Glucides</small><strong id="dashCarbs">0 g</strong><small id="dashCarbsGoal">apports du jour</small></div>
-  <div class="stat"><small>Lipides</small><strong id="dashFat">0 g</strong><small id="dashFatGoal">apports du jour</small></div>
-  <div class="stat"><small>Fibres</small><strong id="dashFiber">0 g</strong><small>apports du jour</small></div>
- </div>
- <div class="card">
-  <div class="row"><h2>Hydratation</h2><span class="pill">EAU</span></div>
-  <div class="big" id="dashWater">0 ml</div>
-  <div class="progress"><div id="dashWaterBar"></div></div>
-  <p id="dashWaterText">Enregistre tes boissons au fil de la journée.</p>
-  <button class="btn full" onclick="go('water')">Ouvrir mon suivi d'eau</button>
- </div>
- <div class="card">
-  <h2>Répartition nutritionnelle</h2>
-  <div id="dashMacros"></div>
- </div>
- <div class="card">
-  <h2>Mes objectifs nutritionnels</h2>
-  <p>Renseigne uniquement les objectifs chiffrés qui t'ont été conseillés par un médecin ou un diététicien. Tu peux laisser les champs vides.</p>
-  <div class="formgrid">
-   <div><label>Calories / jour</label><input id="pCalorieGoal" type="number" min="1" placeholder="Facultatif"></div>
-   <div><label>Protéines (g)</label><input id="pProteinGoal" type="number" min="1" placeholder="Facultatif"></div>
-   <div><label>Glucides (g)</label><input id="pCarbGoal" type="number" min="1" placeholder="Facultatif"></div>
-   <div><label>Lipides (g)</label><input id="pFatGoal" type="number" min="1" placeholder="Facultatif"></div>
-  </div>
-  <button class="btn full" onclick="saveNutritionGoals()">Enregistrer mes objectifs</button>
- </div>
- <div class="card">
-  <h2>Ton conseil du jour</h2>
-  <p id="dailyTip"></p>
- </div>
- <div class="card">
-  <h2>Raccourcis</h2>
-  <div class="quick">
-   <button class="btn mini" onclick="go('nutrition')">+ Aliment</button>
-   <button class="btn secondary mini" onclick="go('scanner')">Scanner</button>
-   <button class="btn secondary mini" onclick="go('training')">+ Séance</button>
-  </div>
- </div>
-</section>
+  <main>
+    <section class="section active" id="home">
+      <div class="hero">
+        <div class="eyebrow">TON ESPACE • TON ÉVOLUTION</div>
+        <h1 id="hello">On construit tes progrès.</h1>
+        <p id="dailyMessage">Chaque journée est une nouvelle occasion d'avancer.</p>
+      </div>
 
-<section class="page" id="nutrition">
- <h1>Nutrition</h1><p>Enregistre tes repas, portions et apports alimentaires.</p>
- <div class="card">
-  <h2>Ajouter un aliment</h2>
-  <label>Nom</label><input id="fName" placeholder="Poulet, riz, banane...">
-  <div class="formgrid">
-   <div><label>Quantité (g/ml)</label><input id="fQty" type="number" value="100"></div>
-   <div><label>Calories / 100 g</label><input id="fCal" type="number" placeholder="kcal"></div>
-   <div><div><label>Protéines / 100 g</label><input id="fP" type="number" step=".1" placeholder="g"></div></div>
-   <div><label>Glucides / 100 g</label><input id="fC" type="number" step=".1" placeholder="g"></div>
-   <div><label>Lipides / 100 g</label><input id="fF" type="number" step=".1" placeholder="g"></div>
-   <div><label>Fibres / 100 g</label><input id="fFiber" type="number" step=".1" placeholder="g"></div>
-  </div>
-  <label>Repas</label>
-  <select id="fMeal"><option>Petit-déjeuner</option><option>Déjeuner</option><option>Collation</option><option>Dîner</option><option>Autre</option></select>
-  <button class="btn full" style="margin-top:14px" onclick="addFood()">Enregistrer l'aliment</button>
- </div>
- <div class="card">
-  <div class="row"><h2>Journal alimentaire</h2><input type="date" id="foodDate" style="max-width:145px" onchange="render()"></div>
-  <div id="foodList"></div>
-  <div class="progress"><div id="foodProgress"></div></div>
-  <div id="foodTotals"></div>
- </div>
- <div class="card">
-  <h2>Recherche de produits</h2>
-  <label>Rechercher un produit</label><input id="productSearch" placeholder="Ex : céréales, Delhaize, Danone...">
-  <button class="btn secondary full" onclick="searchFoods()">Rechercher dans Open Food Facts</button>
-  <div id="productResults"></div>
- </div>
-</section>
+      <div class="panel">
+        <div class="item">
+          <div><h2 style="margin:0">Objectif du jour</h2><small class="muted">Suivi nutritionnel</small></div>
+          <span class="pill" id="goalPill">À définir</span>
+        </div>
+        <div class="grid2">
+          <div class="stat"><span>Calories consommées</span><strong id="homeCalories">0</strong><span>kcal aujourd'hui</span></div>
+          <div class="stat"><span>Objectif calories</span><strong id="homeTarget">—</strong><span id="remaining">Objectif non défini</span></div>
+        </div>
+        <div class="progress"><i id="calProgress"></i></div>
+        <div class="small muted" id="calProgressText">Ajoute tes repas pour commencer ton suivi.</div>
+      </div>
 
-<section class="page" id="water">
- <h1>Hydratation</h1><p>Ton suivi quotidien de l'eau.</p>
- <div class="card hero">
-  <span class="pill">TOTAL AUJOURD'HUI</span>
-  <div class="big" id="waterTotal">0 ml</div>
-  <div class="progress"><div id="waterProgress"></div></div>
-  <p id="waterHint">Les besoins varient selon l'activité, la chaleur et les personnes.</p>
- </div>
- <div class="card">
-  <h2>Ajouter rapidement</h2>
-  <div class="quick">
-   <button class="btn secondary" onclick="addWater(150)">+150 ml</button>
-   <button class="btn secondary" onclick="addWater(250)">+250 ml</button>
-   <button class="btn secondary" onclick="addWater(500)">+500 ml</button>
-  </div>
-  <label>Quantité personnalisée (ml)</label>
-  <input id="waterCustom" type="number" placeholder="Ex : 350">
-  <button class="btn full" style="margin-top:12px" onclick="addCustomWater()">Ajouter ma quantité</button>
- </div>
- <div class="card">
-  <h2>Historique d'aujourd'hui</h2>
-  <div id="waterHistory"></div>
- </div>
- <div class="card">
-  <h2>Historique des 7 derniers jours</h2>
-  <div id="waterWeek"></div>
- </div>
-</section>
+      <div class="panel">
+        <h2>Macros du jour</h2>
+        <div id="homeMacros"></div>
+      </div>
 
-<section class="page" id="scanner">
- <h1>Scanner alimentaire</h1><p>Recherche des produits disponibles en Belgique et ailleurs.</p>
- <div class="card">
-  <h2>Scanner un code-barres</h2>
-  <video id="camera" playsinline style="display:none"></video>
-  <div class="quick">
-   <button class="btn" onclick="startCamera()">Activer caméra</button>
-   <button class="btn secondary" onclick="stopCamera()">Arrêter</button>
+      <div class="grid2">
+        <div class="stat"><span>💧 Eau consommée</span><strong id="homeWater">0 ml</strong><span id="waterGoalText">Objectif non défini</span></div>
+        <div class="stat"><span>🏋️ Entraînements</span><strong id="homeWorkouts">0</strong><span>Cette semaine</span></div>
+      </div>
+
+      <div class="panel">
+        <h2>Ton petit rappel</h2>
+        <p id="dailyTip" style="margin-bottom:0">La régularité compte plus que la perfection.</p>
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="showTab('nutrition')">+ Ajouter un repas</button>
+        <button class="btn secondary" onclick="showTab('water')">+ Ajouter de l'eau</button>
+      </div>
+    </section>
+
+    <section class="section" id="nutrition">
+      <h1>Nutrition</h1>
+      <p>Enregistre tes repas et suis tes apports de la journée.</p>
+      <div class="panel">
+        <h2>Ajouter un aliment</h2>
+        <form id="foodForm">
+          <label>Nom de l'aliment</label>
+          <input id="foodName" required placeholder="Ex : poulet, riz, banane">
+          <div class="formrow">
+            <div><label>Calories (kcal)</label><input id="foodKcal" type="number" min="0" required placeholder="250"></div>
+            <div><label>Protéines (g)</label><input id="foodProtein" type="number" min="0" step=".1" value="0"></div>
+            <div><label>Glucides (g)</label><input id="foodCarbs" type="number" min="0" step=".1" value="0"></div>
+            <div><label>Lipides (g)</label><input id="foodFat" type="number" min="0" step=".1" value="0"></div>
+            <div><label>Fibres (g)</label><input id="foodFiber" type="number" min="0" step=".1" value="0"></div>
+            <div><label>Quantité / portion</label><input id="foodPortion" placeholder="Ex : 150 g"></div>
+          </div>
+          <button class="btn full" type="submit">Ajouter à ma journée</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2>Rechercher un produit</h2>
+        <p class="small">Recherche dans la base publique Open Food Facts. Vérifie toujours les valeurs et la portion indiquées sur l'emballage.</p>
+        <div class="formrow">
+          <input id="foodSearch" placeholder="Nom du produit ou marque">
+          <button class="btn" onclick="searchFood()">Rechercher</button>
+        </div>
+        <div id="searchResults"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Mes aliments aujourd'hui</h2>
+        <div id="foodList" class="empty">Aucun aliment enregistré.</div>
+      </div>
+    </section>
+
+    <section class="section" id="water">
+      <h1>Hydratation</h1>
+      <p>Garde un œil sur ton hydratation au fil de la journée.</p>
+      <div class="panel">
+        <div class="waterglass">💧</div>
+        <h2 id="waterAmount">0 ml</h2>
+        <div class="progress"><i id="waterProgress"></i></div>
+        <div class="small muted" id="waterPercent">Commence à enregistrer tes boissons.</div>
+        <div class="actions" style="margin-top:16px">
+          <button class="btn" onclick="addWater(250)">+ 250 ml</button>
+          <button class="btn secondary" onclick="addWater(500)">+ 500 ml</button>
+          <button class="btn ghost" onclick="addWater(750)">+ 750 ml</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Ajouter une quantité personnalisée</h2>
+        <div class="formrow">
+          <input id="customWater" type="number" min="1" placeholder="Quantité en ml">
+          <button class="btn" onclick="customWater()">Ajouter</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Historique du jour</h2>
+        <div id="waterList" class="empty">Aucune boisson enregistrée.</div>
+      </div>
+    </section>
+
+    <section class="section" id="training">
+      <h1>Entraînement</h1>
+      <p>Note tes séances et garde une trace de ta régularité.</p>
+      <div class="panel">
+        <h2>Enregistrer une séance</h2>
+        <form id="workoutForm">
+          <label>Type de séance</label>
+          <select id="workoutType">
+            <option>Pectoraux</option><option>Dos</option><option>Épaules</option>
+            <option>Bras</option><option>Jambes</option><option>Abdominaux</option>
+            <option>Cardio</option><option>Full body</option><option>Autre</option>
+          </select>
+          <div class="formrow">
+            <div><label>Durée (minutes)</label><input id="workoutDuration" type="number" min="1" placeholder="60"></div>
+            <div><label>Date</label><input id="workoutDate" type="date"></div>
+          </div>
+          <label>Notes (facultatif)</label>
+          <textarea id="workoutNotes" rows="2" placeholder="Exercices, sensations, progression..."></textarea>
+          <button class="btn full">Enregistrer ma séance</button>
+        </form>
+      </div>
+      <div class="panel">
+        <h2>Mes séances</h2>
+        <div id="workoutList" class="empty">Aucune séance enregistrée.</div>
+      </div>
+    </section>
+
+    <section class="section" id="progress">
+      <h1>Progression</h1>
+      <p>Observe ton évolution dans le temps, sans te comparer aux autres.</p>
+      <div class="panel">
+        <h2>Enregistrer mon poids</h2>
+        <form id="weightForm">
+          <div class="formrow">
+            <div><label>Poids (kg)</label><input id="weightValue" type="number" min="1" max="400" step=".1" required placeholder="60"></div>
+            <div><label>Date</label><input id="weightDate" type="date"></div>
+          </div>
+          <button class="btn full">Enregistrer</button>
+        </form>
+      </div>
+      <div class="grid2">
+        <div class="stat"><span>Dernier poids</span><strong id="lastWeight">—</strong><span>kg</span></div>
+        <div class="stat"><span>Évolution</span><strong id="weightChange">—</strong><span>depuis la première mesure</span></div>
+      </div>
+      <div class="panel">
+        <h2>Historique du poids</h2>
+        <div id="weightList" class="empty">Pas encore de mesure.</div>
+      </div>
+      <div class="panel">
+        <h2>Mes mensurations</h2>
+        <form id="measureForm">
+          <div class="formrow">
+            <div><label>Tour de bras (cm)</label><input id="measureArm" type="number" min="0" step=".1"></div>
+            <div><label>Tour de poitrine (cm)</label><input id="measureChest" type="number" min="0" step=".1"></div>
+            <div><label>Tour de taille (cm)</label><input id="measureWaist" type="number" min="0" step=".1"></div>
+            <div><label>Tour de cuisse (cm)</label><input id="measureThigh" type="number" min="0" step=".1"></div>
+          </div>
+          <button class="btn full">Enregistrer les mensurations</button>
+        </form>
+        <div id="measureList"></div>
+      </div>
+    </section>
+
+    <section class="section" id="profile">
+      <h1>Mon profil</h1>
+      <p>Tes informations et tes objectifs NYZEN.</p>
+      <div class="panel">
+        <h2>Mes informations</h2>
+        <div id="profileSummary"></div>
+        <button class="btn secondary full" onclick="openProfileEdit()">Modifier mon profil</button>
+      </div>
+      <div class="panel">
+        <h2>Mes objectifs personnels</h2>
+        <p class="small">Les objectifs nutritionnels sont facultatifs. Pour les mineurs, les besoins varient avec la croissance et l'activité : ne fixe pas de restriction calorique sans avis d'un professionnel de santé.</p>
+        <form id="targetForm">
+          <label>Objectif calories (kcal, facultatif)</label>
+          <input id="targetCalories" type="number" min="0" placeholder="Laisser vide si non défini">
+          <div class="formrow">
+            <div><label>Protéines (g)</label><input id="targetProtein" type="number" min="0" placeholder="Facultatif"></div>
+            <div><label>Glucides (g)</label><input id="targetCarbs" type="number" min="0" placeholder="Facultatif"></div>
+            <div><label>Lipides (g)</label><input id="targetFat" type="number" min="0" placeholder="Facultatif"></div>
+            <div><label>Eau (ml)</label><input id="targetWater" type="number" min="0" placeholder="Facultatif"></div>
+          </div>
+          <button class="btn full">Enregistrer mes objectifs</button>
+        </form>
+      </div>
+      <div class="panel">
+        <h2>Mes compléments</h2>
+        <p class="small">Note les compléments que tu utilises. Cet espace ne remplace pas un avis médical.</p>
+        <form id="suppForm">
+          <div class="formrow">
+            <div><label>Complément</label>
+              <select id="suppName">
+                <option>Whey</option><option>Créatine</option><option>Oméga-3</option>
+                <option>Multivitamines</option><option>Vitamine D</option><option>Autre</option>
+              </select>
+            </div>
+            <div><label>Quantité / remarque</label><input id="suppDose" placeholder="Ex : selon l'étiquette"></div>
+          </div>
+          <button class="btn full">Ajouter un complément</button>
+        </form>
+        <div id="suppList" class="empty">Aucun complément enregistré.</div>
+      </div>
+      <div class="panel">
+        <h2>Sauvegarde de mes données</h2>
+        <p class="small">Tes informations sont enregistrées dans le stockage local de ce navigateur. Exporte régulièrement une sauvegarde pour ne pas les perdre.</p>
+        <div class="actions">
+          <button class="btn secondary" onclick="exportData()">Exporter mes données</button>
+          <button class="btn ghost" onclick="document.getElementById('importFile').click()">Importer une sauvegarde</button>
+          <input id="importFile" class="hidden" type="file" accept="application/json" onchange="importData(event)">
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Réinitialiser l'application</h2>
+        <button class="btn danger full" onclick="resetApp()">Réinitialiser mes données</button>
+      </div>
+    </section>
+  </main>
+  <footer>NYZEN NUTRI • Construis tes habitudes, avance à ton rythme.</footer>
+</div>
+
+<nav class="nav">
+  <button class="active" data-tab="home" onclick="showTab('home')"><b>⌂</b>Accueil</button>
+  <button data-tab="nutrition" onclick="showTab('nutrition')"><b>◉</b>Nutrition</button>
+  <button data-tab="water" onclick="showTab('water')"><b>♧</b>Eau</button>
+  <button data-tab="training" onclick="showTab('training')"><b>⌁</b>Sport</button>
+  <button data-tab="progress" onclick="showTab('progress')"><b>↗</b>Suivi</button>
+  <button data-tab="profile" onclick="showTab('profile')"><b>☻</b>Profil</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<!-- INSCRIPTION -->
+<div class="modal" id="onboarding">
+  <div class="modalbox">
+    <div class="logo">NYZEN <span>NUTRI</span></div>
+    <div class="stepdots" id="stepDots"><i class="on"></i><i></i><i></i><i></i></div>
+    <div id="onboardingContent"></div>
+    <div class="actions" style="margin-top:15px">
+      <button class="btn ghost hidden" id="backStep" onclick="previousStep()">Retour</button>
+      <button class="btn" id="nextStep" style="margin-left:auto" onclick="nextStep()">Continuer</button>
+    </div>
   </div>
-  <p id="cameraInfo">Autorise l'accès à la caméra si ton navigateur le demande.</p>
-  <label>Ou saisis le code-barres</label>
-  <input id="barcodeInput" placeholder="EAN / code-barres">
-  <button class="btn full" style="margin-top:10px" onclick="lookupBarcode()">Chercher le produit</button>
-  <div id="barcodeResult"></div>
- </div>
- <div class="card">
-  <h2>Recherche par nom</h2>
-  <input id="scannerSearch" placeholder="Nom du produit">
-  <button class="btn secondary full" style="margin-top:10px" onclick="scannerSearch()">Rechercher</button>
-  <div id="scannerResults"></div>
- </div>
- <p>Les valeurs sont celles de la base Open Food Facts. Vérifie les informations sur l'emballage : les fiches peuvent être incomplètes.</p>
-</section>
+</div>
+
+<!-- MODIFICATION PROFIL -->
+<div class="modal" id="profileModal">
+  <div class="modalbox">
+    <h2>Modifier mon profil</h2>
+    <form id="editProfileForm">
+      <label>Prénom ou pseudo</label><input id="editName" required>
+      <div class="formrow">
+        <div><label>Âge</label><input id="editAge" type="number" min="17" max="99" required></div>
+        <div><label>Taille (cm)</label><input id="editHeight" type="number" min="100" max="250"></div>
+        <div><label>Poids (kg)</label><input id="editWeight" type="number" min="1" max="400" step=".1"></div>
+        <div><label>Entraînements / semaine</label><select id="editFrequency"><option>1 à 2</option><option>3</option><option>4 à 5</option><option>6 ou plus</option></select></div>
+      </div>
+      <label>Objectif</label>
+      <select id="editGoal"><option>Prise de muscle</option><option>Forme et santé</option><option>Maintien</option><option>Performance sportive</option></select>
+      <button class="btn full">Enregistrer</button>
+      <button type="button" class="btn ghost full" style="margin-top:8px" onclick="closeModal('profileModal')">Annuler</button>
+    </form>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+const today = () => new Date().toISOString().slice(0,10);
+const freshDay = () => ({foods:[],water:[],workouts:[]});
+const defaultDB = () => ({
+  version:2, profile:null, targets:{calories:"",protein:"",carbs:"",fat:"",water:""},
+  days:{},weights:[],measurements:[],supplements:[],onboarded:false
+});
+let db = loadDB();
+let onboardingStep = 0;
+let onboardingData = {};
+let toastTimer;
+
+function loadDB(){
+  try{
+    const saved=localStorage.getItem("nyzenNutriV2");
+    if(!saved) return defaultDB();
+    const parsed=JSON.parse(saved);
+    return {...defaultDB(),...parsed,targets:{...defaultDB().targets,...(parsed.targets||{})}};
+  }catch(e){return defaultDB();}
+}
+function saveDB(){localStorage.setItem("nyzenNutriV2",JSON.stringify(db));}
+function dayData(date=today()){
+  if(!db.days[date]) db.days[date]=freshDay();
+  return db.days[date];
+}
+function number(id){return Math.max(0,Number($(id).value)||0);}
+function esc(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function toast(message){
+  $("toast").textContent=message;$("toast").style.display="block";
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").style.display="none",2400);
+}
+function showTab(tab){
+  document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===tab));
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function closeModal(id){$(id).classList.remove("open");}
+function openModal(id){$(id).classList.add("open");}
+
+const questions=[
+  {
+    title:"Bienvenue chez NYZEN.",
+    desc:"On va construire ton espace de suivi. Réponds aux questions pour personnaliser ton expérience.",
+    fields:`
+      <label>Comment veux-tu qu'on t'appelle ?</label>
+      <input id="obName" maxlength="30" placeholder="Ton prénom ou pseudo" required>
+      <div class="formrow">
+        <div><label>Âge (17 ans minimum)</label><input id="obAge" type="number" min="17" max="99" placeholder="17" required></div>
+        <div><label>Taille (cm)</label><input id="obHeight" type="number" min="100" max="250" placeholder="170" required></div>
+      </div>
+      <label>Poids actuel (kg)</label><input id="obWeight" type="number" min="1" max="400" step=".1" placeholder="60" required>
+    `
+  },
+  {
+    title:"Quel est ton objectif ?",
+    desc:"Ton espace sera organisé autour de ce qui compte le plus pour toi.",
+    fields:`
+      <label>Objectif principal</label>
+      <select id="obGoal"><option>Prise de muscle</option><option>Forme et santé</option><option>Maintien</option><option>Performance sportive</option></select>
+      <label>Combien de fois t'entraînes-tu par semaine ?</label>
+      <select id="obFrequency"><option>1 à 2</option><option>3</option><option selected>4 à 5</option><option>6 ou plus</option></select>
+      <label>Depuis combien de temps t'entraînes-tu ?</label>
+      <select id="obExperience"><option>Je débute</option><option>1 à 6 mois</option><option>6 à 12 mois</option><option>Plus d'un an</option></select>
+      <label>Quel sport pratiques-tu principalement ?</label>
+      <input id="obSport" placeholder="Ex : musculation, football...">
+    `
+  },
+  {
+    title:"Tes habitudes au quotidien",
+    desc:"Quelques informations pour adapter les conseils et le suivi.",
+    fields:`
+      <label>Combien de repas prends-tu généralement ?</label>
+      <select id="obMeals"><option>2 repas</option><option selected>3 repas</option><option>4 repas</option><option>5 repas ou plus</option><option>Ça varie</option></select>
+      <label>Ton alimentation</label>
+      <select id="obDiet"><option>De tout</option><option>Végétarienne</option><option>Végétalienne</option><option>Sans porc</option><option>Autre / spécifique</option></select>
+      <label>Sommeil moyen</label>
+      <select id="obSleep"><option>Moins de 6 h</option><option>6 à 7 h</option><option selected>7 à 8 h</option><option>8 à 9 h</option><option>Plus de 9 h</option></select>
+      <label>Ton hydratation actuelle</label>
+      <select id="obHydration"><option>Je bois peu</option><option>Je dois y penser</option><option>Je bois régulièrement</option></select>
+      <label>Ta priorité en ce moment</label>
+      <select id="obPriority"><option>Être régulier</option><option>Mieux manger</option><option>Suivre mes progrès</option><option>Améliorer mes entraînements</option><option>Un peu de tout</option></select>
+    `
+  },
+  {
+    title:"Tes préférences",
+    desc:"On termine la configuration de ton espace.",
+    fields:`
+      <label>Quels compléments souhaites-tu suivre ?</label>
+      <div class="notice">Tu pourras modifier cette liste plus tard. NYZEN NUTRI ne recommande pas de commencer un complément : note simplement ceux que tu utilises déjà.</div>
+      <div style="margin:12px 0">
+        <label><input type="checkbox" id="obWhey" style="width:auto;margin:0 7px 0 0"> Whey</label><br><br>
+        <label><input type="checkbox" id="obCreatine" style="width:auto;margin:0 7px 0 0"> Créatine</label><br><br>
+        <label><input type="checkbox" id="obOmega" style="width:auto;margin:0 7px 0 0"> Oméga-3</label><br><br>
+        <label><input type="checkbox" id="obOther" style="width:auto;margin:0 7px 0 0"> Autres compléments</label>
+      </div>
+      <label>Qu'aimerais-tu améliorer en premier ?</label>
+      <textarea id="obMore" rows="3" placeholder="Tu peux écrire tes objectifs ou tes difficultés..."></textarea>
+    `
+  }
+];
+
+function renderOnboarding(){
+  const q=questions[onboardingStep];
+  $("onboardingContent").innerHTML=`<h2>${q.title}</h2><p class="small">${q.desc}</p>${q.fields}`;
+  $("stepDots").innerHTML=questions.map((_,i)=>`<i class="${i<=onboardingStep?"on":""}"></i>`).join("");
+  $("backStep").classList.toggle("hidden",onboardingStep===0);
+  $("nextStep").textContent=onboardingStep===questions.length-1?"Créer mon espace":"Continuer";
+}
+function collectOnboarding(){
+  const ids=[
+    ["name","obName"],["age","obAge"],["height","obHeight"],["weight","obWeight"],
+    ["goal","obGoal"],["frequency","obFrequency"],["experience","obExperience"],
+    ["sport","obSport"],["meals","obMeals"],["diet","obDiet"],["sleep","obSleep"],
+    ["hydration","obHydration"],["priority","obPriority"],["more","obMore"]
+  ];
+  ids.forEach(([key,id])=>{if($(id)) onboardingData[key]=$(id).value.trim();});
+  if($("obWhey")) onboardingData.supps=[
+    $("obWhey").checked?"Whey":null,
+    $("obCreatine").checked?"Créatine":null,
+    $("obOmega").checked?"Oméga-3":null,
+    $("obOther").checked?"Autres":null
+  ].filter(Boolean);
+}
+function nextStep(){
+  collectOnboarding();
+  if(onboardingStep===0){
+    if(!onboardingData.name||!onboardingData.age||!onboardingData.height||!onboardingData.weight){toast("Complète les champs obligatoires.");return;}
+    if(Number(onboardingData.age)<17){toast("L'inscription est disponible à partir de 17 ans.");return;}
+    if(Number(onboardingData.age)>99||Number(onboardingData.height)<100||Number(onboardingData.weight)<=0){toast("Vérifie les informations saisies.");return;}
+  }
+  if(onboardingStep<questions.length-1){onboardingStep++;renderOnboarding();return;}
+  db.profile=onboardingData;
+  db.onboarded=true;
+  db.weights.push({date:today(),value:Number(onboardingData.weight)});
+  db.supplements=(onboardingData.supps||[]).map(name=>({name,dose:""}));
+  saveDB();closeModal("onboarding");render();
+  $("dailyMessage").textContent=`Bravo ${onboardingData.name} ! Ton espace est prêt. On va t'aider à suivre tes habitudes, tes repas et tes progrès, étape par étape.`;
+  toast("Bienvenue chez NYZEN NUTRI !");
+}
+function previousStep(){collectOnboarding();if(onboardingStep>0){onboardingStep--;renderOnboarding();}}
+
+function addFood(food){
+  const d=dayData();
+  d.foods.push({
+    id:Date.now(),name:food.name,portion:food.portion||"",
+    kcal:Number(food.kcal)||0,protein:Number(food.protein)||0,
+    carbs:Number(food.carbs)||0,fat:Number(food.fat)||0,fiber:Number(food.fiber)||0
+  });
+  saveDB();render();toast("Aliment ajouté !");
+}
+$("foodForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=$("foodName").value.trim();
+  if(!name)return;
+  addFood({name,portion:$("foodPortion").value,kcal:number("foodKcal"),protein:number("foodProtein"),carbs:number("foodCarbs"),fat:number("foodFat"),fiber:number("foodFiber")});
+  e.target.reset();
+});
+function deleteFood(id){
+  dayData().foods=dayData().foods.filter(x=>x.id!==id);saveDB();render();
+}
+async function searchFood(){
+  const query=$("foodSearch").value.trim();
+  if(!query){toast("Entre le nom d'un produit.");return;}
+  $("searchResults").innerHTML='<div class="empty">Recherche en cours...</div>';
+  try{
+    const url="https://world.openfoodfacts.org/cgi/search.pl?search_terms="+encodeURIComponent(query)+"&search_simple=1&action=process&json=1&page_size=8";
+    const res=await fetch(url);if(!res.ok)throw new Error("Recherche impossible");
+    const data=await res.json();
+    const products=(data.products||[]).filter(p=>p.product_name);
+    if(!products.length){$("searchResults").innerHTML='<div class="empty">Aucun résultat. Tu peux ajouter les valeurs manuellement.</div>';return;}
+    $("searchResults").innerHTML=products.map((p,i)=>`
+      <div class="item">
+        <div><strong>${esc(p.product_name)}</strong><small>${esc(p.brands||"Marque inconnue")} • valeurs pour 100 g/ml</small></div>
+        <button class="btn smallbtn" onclick="useProduct(${i})">Ajouter</button>
+      </div>`).join("");
+    window.foundProducts=products;
+  }catch(e){$("searchResults").innerHTML='<div class="empty">Recherche indisponible. Réessaie ou ajoute ton aliment manuellement.</div>';}
+}
+function useProduct(i){
+  const p=(window.foundProducts||[])[i];if(!p)return;
+  const n=p.nutriments||{};
+  addFood({
+    name:p.product_name,portion:"100 g/ml",
+    kcal:n["energy-kcal_100g"]??(Number(n["energy_100g"])/4.184)||0,
+    protein:n.proteins_100g||0,carbs:n.carbohydrates_100g||0,
+    fat:n.fat_100g||0,fiber:n.fiber_100g||0
+  });
+}
+
+function addWater(amount){
+  if(!Number.isFinite(amount)||amount<=0)return;
+  dayData().water.push({id:Date.now(),amount,time:new Date().toLocaleTimeString("fr-BE",{hour:"2-digit",minute:"2-digit"})});
+  saveDB();render();toast("Hydratation enregistrée !");
+}
+function customWater(){
+  const amount=number("customWater");
+  if(!amount){toast("Entre une quantité en ml.");return;}
+  addWater(amount);$("customWater").value="";
+}
+function deleteWater(id){
+  dayData().water=dayData().water.filter(x=>x.id!==id);saveDB();render();
+}
+
+$("workoutForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const date=$("workoutDate").value||today();
+  if(!db.days[date])db.days[date]=freshDay();
+  db.days[date].workouts.push({id:Date.now(),type:$("workoutType").value,duration:number("workoutDuration"),notes:$("workoutNotes").value});
+  saveDB();e.target.reset();$("workoutDate").value=today();render();toast("Séance enregistrée !");
+});
+function deleteWorkout(date,id){
+  db.days[date].workouts=db.days[date].workouts.filter(x=>x.id!==id);saveDB();render();
+}
+$("weightForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  db.weights.push({date:$("weightDate").value||today(),value:number("weightValue")});
+  db.weights.sort((a,b)=>a.date.localeCompare(b.date));saveDB();e.target.reset();$("weightDate").value=today();render();toast("Poids enregistré !");
+});
+function deleteWeight(index){db.weights.splice(index,1);saveDB();render();}
+$("measureForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const values={};
+  ["Arm","Chest","Waist","Thigh"].forEach(k=>{const v=number("measure"+k);if(v)values[k]=v;});
+  if(!Object.keys(values).length){toast("Ajoute au moins une mensuration.");return;}
+  db.measurements.push({date:today(),values});saveDB();e.target.reset();render();toast("Mensurations enregistrées !");
+});
+$("suppForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  db.supplements.push({name:$("suppName").value,dose:$("suppDose").value.trim()});
+  saveDB();e.target.reset();render();toast("Complément ajouté !");
+});
+function deleteSupp(i){db.supplements.splice(i,1);saveDB();render();}
+
+$("targetForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  ["calories","protein","carbs","fat","water"].forEach(k=>{
+    const id={calories:"targetCalories",protein:"targetProtein",carbs:"targetCarbs",fat:"targetFat",water:"targetWater"}[k];
+    db.targets[k]=$(id).value.trim();
+  });
+  saveDB();render();toast("Objectifs enregistrés !");
+});
+
+function openProfileEdit(){
+  const p=db.profile||{};
+  $("editName").value=p.name||"";$("editAge").value=p.age||"";
+  $("editHeight").value=p.height||"";$("editWeight").value=p.weight||"";
+  $("editFrequency").value=p.frequency||"4 à 5";$("editGoal").value=p.goal||"Prise de muscle";
+  openModal("profileModal");
+}
+$("editProfileForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const age=Number($("editAge").value);
+  if(age<17||age>99){toast("L'âge minimum est de 17 ans.");return;}
+  db.profile={...db.profile,name:$("editName").value.trim(),age,height:$("editHeight").value,weight:$("editWeight").value,frequency:$("editFrequency").value,goal:$("editGoal").value};
+  saveDB();closeModal("profileModal");render();toast("Profil mis à jour !");
+});
+
+function exportData(){
+  const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");
+  a.href=url;a.download="nyzen-nutri-sauvegarde.json";a.click();URL.revokeObjectURL(url);
+}
+function importData(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const imported=JSON.parse(reader.result);
+      if(!imported||typeof imported!=="object"||!imported.days)throw new Error();
+      db={...defaultDB(),...imported};saveDB();render();toast("Sauvegarde importée !");
+    }catch(e){toast("Fichier de sauvegarde invalide.");}
+    event.target.value="";
+  };
+  reader.readAsText(file);
+}
+function resetApp(){
+  if(!confirm("Supprimer toutes tes données NYZEN NUTRI sur cet appareil ? Exporte une sauvegarde avant si nécessaire."))return;
+  localStorage.removeItem("nyzenNutriV2");db=defaultDB();location.reload();
+}
+
+function sumFoods(){
+  return dayData().foods.reduce((a,f)=>{
+    ["kcal","protein","carbs","fat","fiber"].forEach(k=>a[k]+=Number(f[k])||0);return a;
+  },{kcal:0,protein:0,carbs:0,fat:0,fiber:0});
+}
+function progressBar(value,target){
+  if(!target||Number(target)<=0)return 0;
+  return Math.min(100,Math.round(value/Number(target)*100));
+}
+function macroHTML(label,value,target,color){
+  const pct=progressBar(value,target);
+  return `<div class="macro"><div class="macrohead"><span>${label}</span><b>${value.toFixed(1)} g ${target?"/ "+target+" g":""}</b></div><div class="progress"><i style="width:${pct}%;background:${color}"></i></div></div>`;
+}
+const tips=[
+  "La régularité compte davantage qu'une journée parfaite.",
+  "Prends le temps de récupérer : le repos fait partie de l'entraînement.",
+  "Prépare tes repas à l'avance si cela t'aide à garder tes habitudes.",
+  "Concentre-toi sur ta technique avant de chercher à augmenter les charges.",
+  "Bois régulièrement au fil de la journée, selon ta soif et ton activité.",
+  "Chaque séance est une occasion d'apprendre et de progresser.",
+  "Écoute ton corps : une douleur inhabituelle mérite de l'attention."
+];
+function render(){
+  const p=db.profile||{};const d=dayData();const sums=sumFoods();
+  $("todayLabel").textContent=new Date().toLocaleDateString("fr-BE",{weekday:"long",day:"numeric",month:"long"});
+  $("avatar").textContent=(p.name||"N").slice(0,1).toUpperCase();
+  $("hello").textContent=p.name?`On avance, ${p.name}.`:"On construit tes progrès.";
+  $("goalPill").textContent=p.goal||"À définir";
+  $("homeCalories").textContent=Math.round(sums.kcal);
+  $("homeTarget").textContent=db.targets.calories?db.targets.calories:"—";
+  $("remaining").textContent=db.targets.calories?`${Math.max(0,Number(db.targets.calories)-sums.kcal).toFixed(0)} kcal restantes`:"Aucun objectif défini";
+  $("calProgress").style.width=progressBar(sums.kcal,db.targets.calories)+"%";
+  $("calProgressText").textContent=db.targets.calories?`${progressBar(sums.kcal,db.targets.calories)} % de l'objectif renseigné`:"Tu peux suivre tes repas sans définir de cible calorique.";
+  $("homeMacros").innerHTML=
+    macroHTML("Protéines",sums.protein,db.targets.protein,"#9470ff")+
+    macroHTML("Glucides",sums.carbs,db.targets.carbs,"#6ebcff")+
+    macroHTML("Lipides",sums.fat,db.targets.fat,"#ffbd70")+
+    macroHTML("Fibres",sums.fiber,"","#6fe0ae");
+  const water=d.water.reduce((a,x)=>a+x.amount,0);
+  $("homeWater").textContent=water+" ml";
+  $("waterGoalText").textContent=db.targets.water?`Objectif : ${db.targets.water} ml`:"À ton rythme";
+  const weekAgo=new Date(Date.now()-6*86400000).toISOString().slice(0,10);
+  const workouts=Object.entries(db.days).filter(([date])=>date>=weekAgo).reduce((a,[,v])=>a+(v.workouts||[]).length,0);
+  $("homeWorkouts").textContent=workouts;
+  const dayIndex=Math.floor(Date.now()/86400000)%tips.length;
+  $("dailyTip").textContent=tips[dayIndex];
+  $("dailyMessage").textContent=p.name?`Ton objectif : ${p.goal||"progresser"}. Avance à ton rythme, une habitude après l'autre.`:"Chaque journée est une nouvelle occasion d'avancer.";
+
+  $("foodList").innerHTML=d.foods.length?d.foods.map(f=>`
+    <div class="item"><div><strong>${esc(f.name)}</strong><small>${esc(f.portion)} • ${f.kcal} kcal • P ${f.protein} g • G ${f.carbs} g • L ${f.fat} g</small></div>
+    <button class="btn danger smallbtn" onclick="deleteFood(${f.id})">Retirer</button></div>`).join(""):'<div class="empty">Aucun aliment enregistré.</div>';
+
+  $("waterAmount").textContent=water+" ml";
+  $("waterProgress").style.width=progressBar(water,db.targets.water)+"%";
+  $("waterPercent").textContent=db.targets.water?`${progressBar(water,db.targets.water)} % de l'objectif renseigné`:"Tu peux ajouter tes verres d'eau ici.";
+  $("waterList").innerHTML=d.water.length?d.water.map(w=>`
+    <div class="item"><div><strong>${w.amount} ml</strong><small>${esc(w.time||"Aujourd'hui")}</small></div><button class="btn danger smallbtn" onclick="deleteWater(${w.id})">Retirer</button></div>`).join(""):'<div class="empty">Aucune boisson enregistrée.</div>';
+
+  const allWorkouts=Object.entries(db.days).flatMap(([date,v])=>(v.workouts||[]).map(w=>({...w,date}))).sort((a,b)=>b.date.localeCompare(a.date));
+  $("workoutList").innerHTML=allWorkouts.length?allWorkouts.map(w=>`
+    <div class="item"><div><strong>${esc(w.type)}</strong><small>${w.date} • ${w.duration||"Durée non précisée"} min ${w.notes?"• "+esc(w.notes):""}</small></div><button class="btn danger smallbtn" onclick="deleteWorkout('${w.date}',${w.id})">Retirer</button></div>`).join(""):'<div class="empty">Aucune séance enregistrée.</div>';
+
+  const weights=db.weights.slice().sort((a,b)=>a.date.localeCompare(b.date));
+  $("lastWeight").textContent=weights.length?weights[weights.length-1].value:"—";
+  $("weightChange").textContent=weights.length>1?((weights[weights.length-1].value-weights[0].value)>0?"+":"")+(weights[weights.length-1].value-weights[0].value).toFixed(1)+" kg":"—";
+  $("weightList").innerHTML=weights.length?weights.slice().reverse().map(w=>{
+    const i=db.weights.indexOf(w);
+    return `<div class="item"><div><strong>${w.value} kg</strong><small>${w.date}</small></div><button class="btn danger smallbtn" onclick="deleteWeight(${i})">Retirer</button></div>`;
+  }).join(""):'<div class="empty">Pas encore de mesure.</div>';
+  $("measureList").innerHTML=db.measurements.slice().reverse().map(m=>`
+    <div class="item"><div><strong>${m.date}</strong><small>${Object.entries(m.values).map(([k,v])=>esc(k)+": "+v+" cm").join(" • ")}</small></div></div>`).join("")||'<div class="empty">Aucune mensuration enregistrée.</div>';
+
+  $("profileSummary").innerHTML=p.name?`
+    <div class="item"><span>Prénom / pseudo</span><strong>${esc(p.name)}</strong></div>
+    <div class="item"><span>Âge</span><strong>${esc(p.age)} ans</strong></div>
+    <div class="item"><span>Taille</span><strong>${esc(p.height)} cm</strong></div>
+    <div class="item"><span>Poids de départ</span><strong>${esc(p.weight)} kg</strong></div>
+    <div class="item"><span>Objectif</span><strong>${esc(p.goal)}</strong></div>
+    <div class="item"><span>Entraînement</span><strong>${esc(p.frequency)} fois / semaine</strong></div>
+    <div class="item"><span>Expérience</span><strong>${esc(p.experience)}</strong></div>
+    <div class="item"><span>Sport</span><strong>${esc(p.sport||"Non précisé")}</strong></div>
+    <div class="item"><span>Repas</span><strong>${esc(p.meals)}</strong></div>
+    <div class="item"><span>Alimentation</span><strong>${esc(p.diet)}</strong></div>
+    <div class="item"><span>Sommeil</span><strong>${esc(p.sleep)}</strong></div>
+    <div class="item"><span>Priorité</span><strong>${esc(p.priority)}</strong></div>
+    <p class="small">Compléments suivis : ${(p.supps||[]).map(esc).join(", ")||"aucun renseigné"}</p>
+    ${p.more?`<p class="small">Tes notes : ${esc(p.more)}</p>`:""}`:'<div class="empty">Profil non renseigné.</div>';
+
+  ["calories","protein","carbs","fat","water"].forEach(k=>{
+    const id={calories:"targetCalories",protein:"targetProtein",carbs:"targetCarbs",fat:"targetFat",water:"targetWater"}[k];
+    if(document.activeElement!==$(id))$(id).value=db.targets[k]||"";
+  });
+  $("suppList").innerHTML=db.supplements.length?db.supplements.map((s,i)=>`
+    <div class="item"><div><strong>${esc(s.name)}</strong><small>${esc(s.dose||"Aucune remarque")}</small></div><button class="btn danger smallbtn" onclick="deleteSupp(${i})">Retirer</button></div>`).join(""):'<div class="empty">Aucun complément enregistré.</div>';
+}
+
+function init(){
+  $("workoutDate").value=today();$("weightDate").value=today();
+  if(!db.onboarded||!db.profile){renderOnboarding();openModal("onboarding");}
+  render();
+}
+init();
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+}
+</script>
+</body>
+</html>
