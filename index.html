@@ -982,10 +982,14 @@ function removeWorkout(i){
  db.workouts.splice(i,1);
  saveDB();
  renderAll();
+}
 
 function addMeasurement(){
  const weight=number("measureWeight");
- if(!weight){alert("Entre au minimum ton poids.");return}
+ if(!weight){
+  alert("Entre au minimum ton poids.");
+  return;
+ }
 
  db.measurements.push({
   date:today(),
@@ -996,36 +1000,18 @@ function addMeasurement(){
   leg:number("measureLeg")
  });
 
- // Synchroniser le dernier poids avec le profil
  db.profile.weight=weight;
 
  saveDB();
 
- ["measureWeight","measureWaist","measureChest","measureArm","measureLeg"].forEach(id=>$(id).value="");
+ ["measureWeight","measureWaist","measureChest","measureArm","measureLeg"].forEach(id=>{
+  $(id).value="";
+ });
 
  renderAll();
  alert("Mesures enregistrées et calories actualisées !");
 }
 
- const weight=number("measureWeight");
- if(!weight){alert("Entre au minimum ton poids.");return}
-
- db.measurements.push({
-  date:today(),
-  weight,
-  waist:number("measureWaist"),
-  chest:number("measureChest"),
-  arm:number("measureArm"),
-  leg:number("measureLeg")
- });
-
- saveDB();
- ["measureWeight","measureWaist","measureChest","measureArm","measureLeg"].forEach(id=>$(id).value="");
- renderAll();
- alert("Mesures enregistrées !");
-}
-
-function renderMeasures(){
  $("measureList").innerHTML=db.measurements.length?[...db.measurements].reverse().map(m=>`
   <div class="item">
    <b>${safe(m.date)}</b>
