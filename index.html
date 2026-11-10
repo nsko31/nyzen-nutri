@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -109,13 +108,21 @@ input[type=checkbox]{width:auto;accent-color:var(--purple)}
    <div class="field"><label>Sommeil moyen</label><select id="obSleep"><option>Moins de 6 h</option><option>6 à 7 h</option><option selected>7 à 8 h</option><option>8 à 9 h</option><option>Plus de 9 h</option></select></div>
    <div class="field"><label>Motivation actuelle</label><select id="obMotivation"><option>Je commence</option><option selected>Motivé</option><option>Très motivé</option><option>Je reprends</option></select></div>
   </div>
+  <div class="field"><label>Activité quotidienne en dehors du sport</label>
+   <select id="obActivity">
+    <option value="sedentary">Plutôt assis : école, ordinateur, peu de marche</option>
+    <option value="low" selected>Un peu actif : marche régulière dans la journée</option>
+    <option value="active">Actif : je marche et bouge souvent</option>
+    <option value="very">Très actif : journée physique et beaucoup de déplacements</option>
+   </select>
+  </div>
   <div class="field"><label>Compléments utilisés</label>
    <div class="small"><label><input type="checkbox" name="obSupp" value="Whey"> Whey</label>　<label><input type="checkbox" name="obSupp" value="Créatine"> Créatine</label></div>
    <div class="small"><label><input type="checkbox" name="obSupp" value="Oméga-3"> Oméga-3</label>　<label><input type="checkbox" name="obSupp" value="Multivitamines"> Multivitamines</label></div>
    <div class="small"><label><input type="checkbox" name="obSupp" value="Aucun"> Aucun</label></div>
   </div>
   <div class="field"><label>Informations supplémentaires</label><textarea id="obNotes" rows="3" placeholder="Tes difficultés, tes habitudes, tes attentes..."></textarea></div>
-  <div class="notice">NYZEN NUTRI est un outil de suivi et non un dispositif médical. Il ne calcule pas automatiquement tes besoins caloriques. Si tu as moins de 18 ans, fais valider tes objectifs nutritionnels par un professionnel de santé.</div>
+  <div class="notice">NYZEN NUTRI est un outil de suivi et non un dispositif médical. Les besoins énergétiques affichés sont des estimations. Avant 18 ans, fais valider tes repères nutritionnels par un professionnel de santé. Ne les utilise pas comme une limite alimentaire.</div>
   <div class="actions"><button class="btn full" onclick="finishOnboarding()">Créer mon espace NYZEN →</button></div>
  </div>
 </section>
@@ -129,6 +136,17 @@ input[type=checkbox]{width:auto;accent-color:var(--purple)}
   <p id="dailyMessage">Chaque journée est une nouvelle occasion de progresser.</p>
   <div class="actions"><button class="btn small" onclick="showPage('nutrition')">Ajouter un repas +</button><button class="btn secondary small" onclick="showPage('water')">Ajouter de l'eau</button></div>
  </div>
+ <div class="card hero">
+  <span class="pill">TON REPÈRE ÉNERGÉTIQUE</span>
+  <h2 style="margin-top:12px">Estimation quotidienne</h2>
+  <div class="stat">
+   <small>Besoin énergétique estimé</small>
+   <strong id="dailyKcalTarget">À calculer</strong>
+   <small id="dailyKcalSub">Complète ton profil pour obtenir une estimation.</small>
+  </div>
+  <p class="small" id="kcalRemaining" style="margin-top:12px"></p>
+  <p class="small">Ce chiffre est un repère indicatif, pas un plafond ni une obligation à atteindre exactement.</p>
+ </div>
  <div class="grid">
   <div class="stat"><small>Calories enregistrées</small><strong id="homeKcal">0</strong><small>kcal aujourd'hui</small></div>
   <div class="stat"><small>Protéines</small><strong id="homeProtein">0 g</strong><small>consommées aujourd'hui</small></div>
@@ -141,7 +159,7 @@ input[type=checkbox]{width:auto;accent-color:var(--purple)}
   <button class="btn secondary full small" onclick="showPage('nutrition')">Voir ma nutrition</button>
  </div>
  <div class="card">
-  <h2>Ton conseil du jour</h2>
+  <h2>Ton message du jour</h2>
   <p id="dailyTip"></p>
  </div>
  <div class="card">
@@ -190,7 +208,7 @@ input[type=checkbox]{width:auto;accent-color:var(--purple)}
  </div>
  <div class="card">
   <h2>Mes objectifs manuels</h2>
-  <p class="small">Tu peux renseigner tes propres repères. Ils ne sont pas calculés automatiquement.</p>
+  <p class="small">Les autres repères restent modifiables ici. Le besoin énergétique estimé apparaît automatiquement sur l'accueil.</p>
   <div class="grid">
    <div class="field"><label>Calories (kcal)</label><input id="targetKcal" type="number" min="0"></div>
    <div class="field"><label>Protéines (g)</label><input id="targetProtein" type="number" min="0"></div>
@@ -290,7 +308,7 @@ input[type=checkbox]{width:auto;accent-color:var(--purple)}
   <p class="small">Cette action efface les données enregistrées sur cet appareil.</p>
   <button class="btn danger full" onclick="resetApp()">Réinitialiser mon application</button>
  </div>
- <div class="small muted" style="text-align:center;margin:25px">NYZEN NUTRI · Version 3.0</div>
+ <div class="small muted" style="text-align:center;margin:25px">NYZEN NUTRI · Version 3.1</div>
 </section>
 </div>
 </div>
@@ -316,18 +334,21 @@ input[type=checkbox]{width:auto;accent-color:var(--purple)}
   <div class="actions"><button class="btn" onclick="saveProfile()">Enregistrer</button><button class="btn secondary" onclick="closeModal()">Annuler</button></div>
  </div>
 </div>
-
 <script>
 "use strict";
 const $=id=>document.getElementById(id);
 const STORAGE_KEY="nyzenNutriV3";
 const today=()=>new Date().toLocaleDateString("fr-CA");
 const dateText=()=>new Date().toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
+
 const blankDB=()=>({
- onboarded:false,profile:null,targets:{kcal:0,protein:0,carbs:0,fat:0},waterTarget:0,
- days:{},workouts:[],measurements:[],supplements:[]
+ onboarded:false,profile:null,
+ targets:{kcal:0,protein:0,carbs:0,fat:0},
+ waterTarget:0,days:{},workouts:[],measurements:[],supplements:[]
 });
+
 let db=loadDB();
+
 function loadDB(){
  try{
   const raw=localStorage.getItem(STORAGE_KEY);
@@ -336,7 +357,9 @@ function loadDB(){
   return {...blankDB(),...parsed,days:parsed.days||{},targets:{...blankDB().targets,...parsed.targets}};
  }catch(e){return blankDB()}
 }
+
 function saveDB(){localStorage.setItem(STORAGE_KEY,JSON.stringify(db))}
+
 function dayData(){
  const d=today();
  if(!db.days[d])db.days[d]={foods:[],water:[]};
@@ -344,97 +367,242 @@ function dayData(){
  if(!Array.isArray(db.days[d].water))db.days[d].water=[];
  return db.days[d];
 }
+
 function number(id){return Math.max(0,Number($(id).value)||0)}
-function safe(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+function safe(s){
+ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))
+}
+
 function finishOnboarding(){
  const age=number("obAge"),height=number("obHeight"),weight=number("obWeight");
- if(age<17||age>99){alert("L'inscription est réservée aux personnes de 17 ans et plus.");return}
- if(!height||height<100||height>230){alert("Entre une taille valide en centimètres.");return}
- if(!weight||weight<25||weight>300){alert("Entre un poids valide.");return}
+
+ if(age<17||age>99){
+  alert("L'inscription est réservée aux personnes de 17 ans et plus.");
+  return;
+ }
+ if(!height||height<100||height>230){
+  alert("Entre une taille valide en centimètres.");
+  return;
+ }
+ if(!weight||weight<25||weight>300){
+  alert("Entre un poids valide.");
+  return;
+ }
+
  const supps=[...document.querySelectorAll('input[name="obSupp"]:checked')].map(x=>x.value);
+
  db.profile={
-  name:$("obName").value.trim()||"Utilisateur",age,sex:$("obSex").value,height,weight,
-  experience:$("obExperience").value,goal:$("obGoal").value,priority:$("obPriority").value,
-  personal:$("obPersonal").value,frequency:$("obFrequency").value,sport:$("obSport").value,
-  duration:$("obDuration").value,place:$("obPlace").value,meals:$("obMeals").value,
-  diet:$("obDiet").value,appetite:$("obAppetite").value,avoid:$("obAvoid").value,
-  water:$("obWater").value,sleep:$("obSleep").value,motivation:$("obMotivation").value,
-  supplements:supps,notes:$("obNotes").value
+  name:$("obName").value.trim()||"Utilisateur",
+  age,sex:$("obSex").value,height,weight,
+  experience:$("obExperience").value,
+  goal:$("obGoal").value,
+  priority:$("obPriority").value,
+  personal:$("obPersonal").value,
+  frequency:$("obFrequency").value,
+  sport:$("obSport").value,
+  duration:$("obDuration").value,
+  place:$("obPlace").value,
+  meals:$("obMeals").value,
+  diet:$("obDiet").value,
+  appetite:$("obAppetite").value,
+  avoid:$("obAvoid").value,
+  water:$("obWater").value,
+  sleep:$("obSleep").value,
+  motivation:$("obMotivation").value,
+  activity:$("obActivity").value,
+  supplements:supps,
+  notes:$("obNotes").value
  };
+
  db.onboarded=true;
  db.measurements.push({date:today(),weight,waist:0,chest:0,arm:0,leg:0});
- saveDB();startApp();
+ saveDB();
+ startApp();
 }
+
+/*
+ Estimation énergétique :
+ - 17 à 18 ans : équations EER adaptées aux adolescents.
+ - 19 ans et plus : équation Mifflin-St Jeor avec coefficient d'activité.
+ - Aucun surplus automatique pour la prise de muscle.
+ - Si les données nécessaires manquent, aucun chiffre n'est inventé.
+*/
+function calculateDailyCalories(){
+ const p=db.profile;
+ if(!p)return null;
+
+ const age=Number(p.age);
+ const weight=Number(p.weight);
+ const height=Number(p.height);
+ const sex=p.sex;
+ const activity=p.activity||"low";
+
+ if(!age||!weight||!height)return null;
+ if(sex!=="Homme"&&sex!=="Femme")return null;
+
+ if(age<=18){
+  const factors={
+   Homme:{sedentary:1.00,low:1.13,active:1.26,very:1.42},
+   Femme:{sedentary:1.00,low:1.16,active:1.31,very:1.56}
+  };
+  const pa=factors[sex][activity]||factors[sex].low;
+  const h=height/100;
+  let kcal;
+
+  if(sex==="Homme"){
+   kcal=88.5-(61.9*age)+pa*((26.7*weight)+(903*h))+25;
+  }else{
+   kcal=135.3-(30.8*age)+pa*((10*weight)+(934*h))+25;
+  }
+
+  return Math.round(kcal/50)*50;
+ }
+
+ const bmr=sex==="Homme"
+  ?(10*weight)+(6.25*height)-(5*age)+5
+  :(10*weight)+(6.25*height)-(5*age)-161;
+
+ const multipliers={
+  sedentary:1.20,
+  low:1.375,
+  active:1.55,
+  very:1.725
+ };
+
+ return Math.round((bmr*(multipliers[activity]||1.375))/50)*50;
+}
+
 function startApp(){
  $("onboarding").classList.add("hidden");
  $("mainApp").classList.remove("hidden");
  $("tabs").classList.remove("hidden");
- renderAll();showPage("home");
+ renderAll();
+ showPage("home");
 }
+
 function showPage(page){
  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
- const target=$(page);if(target)target.classList.add("active");
+ const target=$(page);
+ if(target)target.classList.add("active");
  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.page===page));
  window.scrollTo({top:0,behavior:"smooth"});
  renderAll();
 }
+
 function sums(){
  return dayData().foods.reduce((a,f)=>{
-  a.kcal+=f.kcal;a.protein+=f.protein;a.carbs+=f.carbs;a.fat+=f.fat;a.fiber+=f.fiber;return a;
+  a.kcal+=f.kcal;
+  a.protein+=f.protein;
+  a.carbs+=f.carbs;
+  a.fat+=f.fat;
+  a.fiber+=f.fiber;
+  return a;
  },{kcal:0,protein:0,carbs:0,fat:0,fiber:0});
 }
+
 function progressBar(value,target){
  if(!target)return '<p class="small muted">Aucun repère personnel renseigné.</p>';
  const pct=Math.min(100,Math.round(value/target*100));
  return `<div class="progress"><div style="width:${pct}%"></div></div><div class="small muted">${fmt(value)} / ${fmt(target)} (${pct}%)</div>`;
 }
-function fmt(n){return (Math.round((Number(n)||0)*10)/10).toLocaleString("fr-FR")}
+
+function fmt(n){
+ return (Math.round((Number(n)||0)*10)/10).toLocaleString("fr-FR");
+}
+
 const tips=[
  "La régularité compte davantage qu'une journée parfaite. Avance étape par étape.",
  "Pense à récupérer : le sommeil et les jours de repos font partie de l'entraînement.",
  "Prends le temps de manger et d'écouter ta faim. Ton alimentation doit rester agréable.",
  "La progression se construit sur la durée. Ne compare pas ton chapitre 1 au chapitre 20 de quelqu'un d'autre.",
  "Une séance bien réalisée vaut mieux qu'une séance précipitée. Priorise la technique.",
- "Hydrate-toi régulièrement au fil de la journée, particulièrement quand tu t'entraînes."
+ "Hydrate-toi régulièrement au fil de la journée, particulièrement quand tu t'entraînes.",
+ "Chaque repas est une occasion de prendre soin de toi. Pas besoin de viser la perfection.",
+ "Continue à ton rythme. Les progrès durables se construisent avec de la patience.",
+ "N'oublie pas : bien récupérer fait aussi partie de ton travail.",
+ "Sois fier de ta régularité, même quand les progrès te semblent lents."
 ];
+
 function renderHome(){
- const p=db.profile,s=sums(),water=dayData().water.reduce((a,x)=>a+x.ml,0);
+ const p=db.profile;
+ const s=sums();
+ const water=dayData().water.reduce((a,x)=>a+x.ml,0);
+ const target=calculateDailyCalories();
+
  $("welcome").textContent="Salut "+p.name+" !";
  $("dailyMessage").textContent="Ton objectif : "+p.goal.toLowerCase()+". Chaque journée est une occasion d'avancer.";
- $("homeKcal").textContent=fmt(s.kcal);$("homeProtein").textContent=fmt(s.protein)+" g";
+
+ $("homeKcal").textContent=fmt(s.kcal);
+ $("homeProtein").textContent=fmt(s.protein)+" g";
  $("homeWater").textContent=fmt(water)+" ml";
  $("homeWeight").textContent=(db.measurements.length?fmt(db.measurements[db.measurements.length-1].weight):fmt(p.weight))+" kg";
- $("dailyTip").textContent=tips[Math.floor(new Date().getDate()%tips.length)];
+
+ if(target){
+  $("dailyKcalTarget").textContent=fmt(target)+" kcal";
+  $("dailyKcalSub").textContent="Estimation calculée selon ton profil et ton activité.";
+  $("kcalRemaining").textContent="Apports enregistrés aujourd'hui : "+fmt(s.kcal)+" kcal.";
+ }else{
+  $("dailyKcalTarget").textContent="Non disponible";
+  $("dailyKcalSub").textContent="Renseigne ton sexe dans ton profil pour permettre une estimation.";
+  $("kcalRemaining").textContent="Aucun calcul n'est effectué avec des informations manquantes.";
+ }
+
+ $("dailyTip").textContent=tips[Math.floor((new Date().getDate()-1)%tips.length)];
+
  $("homeMacros").innerHTML=[
   ["Protéines",s.protein,db.targets.protein,"g"],
   ["Glucides",s.carbs,db.targets.carbs,"g"],
   ["Lipides",s.fat,db.targets.fat,"g"]
  ].map(x=>`<div class="item"><div class="row"><b>${x[0]}</b><span class="small">${fmt(x[1])} / ${x[2]||"—"} ${x[3]}</span></div>${progressBar(x[1],x[2])}</div>`).join("");
+
  $("homeProfile").innerHTML=`Objectif : ${safe(p.goal)}<br>Entraînement : ${safe(p.frequency)}<br>Expérience : ${safe(p.experience)}`;
 }
+
 function renderNutrition(){
  const s=sums();
- $("nKcal").textContent=fmt(s.kcal);$("nProtein").textContent=fmt(s.protein)+" g";
- $("nCarbs").textContent=fmt(s.carbs)+" g";$("nFat").textContent=fmt(s.fat)+" g";
+ const estimated=calculateDailyCalories();
+
+ $("nKcal").textContent=fmt(s.kcal);
+ $("nProtein").textContent=fmt(s.protein)+" g";
+ $("nCarbs").textContent=fmt(s.carbs)+" g";
+ $("nFat").textContent=fmt(s.fat)+" g";
  $("fiberTotal").textContent="Fibres : "+fmt(s.fiber)+" g";
+
  $("macroBars").innerHTML=[
-  ["Calories",s.kcal,db.targets.kcal,"kcal"],
+  ["Calories",s.kcal,db.targets.kcal||estimated,"kcal"],
   ["Protéines",s.protein,db.targets.protein,"g"],
   ["Glucides",s.carbs,db.targets.carbs,"g"],
   ["Lipides",s.fat,db.targets.fat,"g"]
  ].map(x=>`<div class="item"><div class="row"><b>${x[0]}</b><span class="small">${fmt(x[1])} / ${x[2]||"—"} ${x[3]}</span></div>${progressBar(x[1],x[2])}</div>`).join("");
+
  const foods=dayData().foods;
  $("foodCount").textContent=foods.length+" aliment(s)";
- $("foodList").innerHTML=foods.length?foods.map((f,i)=>`<div class="item"><div class="row"><div><b>${safe(f.name)}</b><div class="small muted">${safe(f.meal)} · ${fmt(f.qty)} g/ml · ${fmt(f.kcal)} kcal</div><div class="small muted">P ${fmt(f.protein)} g · G ${fmt(f.carbs)} g · L ${fmt(f.fat)} g · Fibres ${fmt(f.fiber)} g</div></div><button class="btn danger small" onclick="removeFood(${i})">Supprimer</button></div></div>`).join(""):'<div class="empty">Aucun aliment enregistré aujourd’hui.</div>';
+
+ $("foodList").innerHTML=foods.length?foods.map((f,i)=>`
+  <div class="item">
+   <div class="row">
+    <div>
+     <b>${safe(f.name)}</b>
+     <div class="small muted">${safe(f.meal)} · ${fmt(f.qty)} g/ml · ${fmt(f.kcal)} kcal</div>
+     <div class="small muted">P ${fmt(f.protein)} g · G ${fmt(f.carbs)} g · L ${fmt(f.fat)} g · Fibres ${fmt(f.fiber)} g</div>
+    </div>
+    <button class="btn danger small" onclick="removeFood(${i})">Supprimer</button>
+   </div>
+  </div>`).join(""):'<div class="empty">Aucun aliment enregistré aujourd’hui.</div>';
+
  $("targetKcal").value=db.targets.kcal||"";
  $("targetProtein").value=db.targets.protein||"";
  $("targetCarbs").value=db.targets.carbs||"";
  $("targetFat").value=db.targets.fat||"";
 }
+
 function addFood(){
- const name=$("foodName").value.trim(),qty=number("foodQty");
+ const name=$("foodName").value.trim();
+ const qty=number("foodQty");
  if(!name||!qty){alert("Ajoute un nom et une quantité.");return}
  const factor=qty/100;
+
  dayData().foods.push({
   name,meal:$("foodMeal").value,qty,
   kcal:number("foodKcal")*factor,
@@ -443,32 +611,59 @@ function addFood(){
   fat:number("foodFat")*factor,
   fiber:number("foodFiber")*factor
  });
+
  ["foodName","foodKcal","foodProtein","foodCarbs","foodFat","foodFiber"].forEach(id=>$(id).value=id==="foodName"?"":0);
- $("foodQty").value=100;saveDB();renderAll();
+ $("foodQty").value=100;
+ saveDB();
+ renderAll();
 }
-function removeFood(i){dayData().foods.splice(i,1);saveDB();renderAll()}
+
+function removeFood(i){
+ dayData().foods.splice(i,1);
+ saveDB();
+ renderAll();
+}
+
 function saveTargets(){
- db.targets={kcal:number("targetKcal"),protein:number("targetProtein"),carbs:number("targetCarbs"),fat:number("targetFat")};
- saveDB();renderAll();alert("Tes repères ont été enregistrés.");
+ db.targets={
+  kcal:number("targetKcal"),
+  protein:number("targetProtein"),
+  carbs:number("targetCarbs"),
+  fat:number("targetFat")
+ };
+ saveDB();
+ renderAll();
+ alert("Tes repères ont été enregistrés.");
 }
-async function searchFood(){
- const q=$("foodSearch").value.trim();if(!q){alert("Entre le nom d'un aliment.");return}
+ async function searchFood(){
+ const q=$("foodSearch").value.trim();
+ if(!q){alert("Entre le nom d'un aliment.");return}
  $("searchResults").innerHTML='<p class="small">Recherche en cours...</p>';
+
  try{
   const url="https://world.openfoodfacts.org/cgi/search.pl?search_terms="+encodeURIComponent(q)+"&search_simple=1&action=process&json=1&page_size=8";
-  const response=await fetch(url);if(!response.ok)throw Error("Erreur réseau");
+  const response=await fetch(url);
+  if(!response.ok)throw Error("Erreur réseau");
+
   const data=await response.json();
   const products=(data.products||[]).filter(p=>p.product_name);
   window.foundProducts=products;
+
   $("searchResults").innerHTML=products.length?products.map((p,i)=>{
    const n=p.nutriments||{};
    const kcal=Number(n["energy-kcal_100g"]||((Number(n["energy_100g"])||0)/4.184)||0);
    return `<div class="item"><b>${safe(p.product_name)}</b><div class="small muted">${fmt(kcal)} kcal · P ${fmt(n.proteins_100g)} g · G ${fmt(n.carbohydrates_100g)} g · L ${fmt(n.fat_100g)} g / 100 g</div><button class="btn secondary small" onclick="useProduct(${i})">Ajouter cet aliment</button></div>`;
   }).join(""):'<div class="empty">Aucun résultat trouvé. Essaie un autre nom.</div>';
- }catch(e){$("searchResults").innerHTML='<div class="notice">Recherche impossible. Vérifie ta connexion internet et réessaie.</div>'}
+
+ }catch(e){
+  $("searchResults").innerHTML='<div class="notice">Recherche impossible. Vérifie ta connexion internet et réessaie.</div>';
+ }
 }
+
 function useProduct(i){
- const p=(window.foundProducts||[])[i];if(!p)return;
+ const p=(window.foundProducts||[])[i];
+ if(!p)return;
+
  const n=p.nutriments||{};
  $("foodName").value=p.product_name||"Aliment";
  $("foodKcal").value=Number(n["energy-kcal_100g"]||((Number(n["energy_100g"])||0)/4.184)||0);
@@ -479,48 +674,150 @@ function useProduct(i){
  $("foodQty").value=100;
  window.scrollTo({top:0,behavior:"smooth"});
 }
+
 function renderWater(){
- const total=dayData().water.reduce((a,x)=>a+x.ml,0),goal=db.waterTarget||0;
+ const total=dayData().water.reduce((a,x)=>a+x.ml,0);
+ const goal=db.waterTarget||0;
+
  $("waterBig").textContent=fmt(total)+" ml";
  $("waterBar").style.width=goal?Math.min(100,total/goal*100)+"%":"0%";
  $("waterGoalText").textContent=goal?"Repère personnel : "+fmt(goal)+" ml":"Aucun repère quotidien défini.";
  $("waterTarget").value=goal||"";
+
  const entries=dayData().water;
- $("waterList").innerHTML=entries.length?entries.map((x,i)=>`<div class="item row"><span>${fmt(x.ml)} ml <span class="small muted">${safe(x.time)}</span></span><button class="btn danger small" onclick="removeWater(${i})">Supprimer</button></div>`).join(""):'<div class="empty">Aucune eau enregistrée aujourd’hui.</div>';
+ $("waterList").innerHTML=entries.length?entries.map((x,i)=>`
+  <div class="item row">
+   <span>${fmt(x.ml)} ml <span class="small muted">${safe(x.time)}</span></span>
+   <button class="btn danger small" onclick="removeWater(${i})">Supprimer</button>
+  </div>`).join(""):'<div class="empty">Aucune eau enregistrée aujourd’hui.</div>';
 }
-function addWater(ml){dayData().water.push({ml,time:new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})});saveDB();renderAll()}
-function addCustomWater(){const ml=number("customWater");if(!ml){alert("Entre une quantité valide.");return}addWater(ml);$("customWater").value=""}
-function removeWater(i){dayData().water.splice(i,1);saveDB();renderAll()}
-function saveWaterTarget(){db.waterTarget=number("waterTarget");saveDB();renderAll()}
+
+function addWater(ml){
+ dayData().water.push({
+  ml,
+  time:new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})
+ });
+ saveDB();
+ renderAll();
+}
+
+function addCustomWater(){
+ const ml=number("customWater");
+ if(!ml){alert("Entre une quantité valide.");return}
+ addWater(ml);
+ $("customWater").value="";
+}
+
+function removeWater(i){
+ dayData().water.splice(i,1);
+ saveDB();
+ renderAll();
+}
+
+function saveWaterTarget(){
+ db.waterTarget=number("waterTarget");
+ saveDB();
+ renderAll();
+}
+
 function addWorkout(){
- const name=$("workoutName").value.trim(),duration=number("workoutDuration");
+ const name=$("workoutName").value.trim();
+ const duration=number("workoutDuration");
+
  if(!name){alert("Donne un nom à ta séance.");return}
- db.workouts.unshift({date:today(),name,duration,type:$("workoutType").value,exercises:$("workoutExercises").value});
- saveDB();$("workoutName").value="";$("workoutDuration").value="";$("workoutExercises").value="";renderAll();alert("Séance enregistrée !");
+
+ db.workouts.unshift({
+  date:today(),
+  name,
+  duration,
+  type:$("workoutType").value,
+  exercises:$("workoutExercises").value
+ });
+
+ saveDB();
+ $("workoutName").value="";
+ $("workoutDuration").value="";
+ $("workoutExercises").value="";
+ renderAll();
+ alert("Séance enregistrée !");
 }
+
 function renderWorkouts(){
- $("workoutList").innerHTML=db.workouts.length?db.workouts.map((w,i)=>`<div class="item"><div class="row"><b>${safe(w.name)}</b><button class="btn danger small" onclick="removeWorkout(${i})">Supprimer</button></div><div class="small muted">${safe(w.date)} · ${safe(w.type)} · ${w.duration?fmt(w.duration)+" min":"Durée non précisée"}</div><p class="small">${safe(w.exercises||"Aucun exercice détaillé.")}</p></div>`).join(""):'<div class="empty">Aucune séance enregistrée.</div>';
+ $("workoutList").innerHTML=db.workouts.length?db.workouts.map((w,i)=>`
+  <div class="item">
+   <div class="row">
+    <b>${safe(w.name)}</b>
+    <button class="btn danger small" onclick="removeWorkout(${i})">Supprimer</button>
+   </div>
+   <div class="small muted">${safe(w.date)} · ${safe(w.type)} · ${w.duration?fmt(w.duration)+" min":"Durée non précisée"}</div>
+   <p class="small">${safe(w.exercises||"Aucun exercice détaillé.")}</p>
+  </div>`).join(""):'<div class="empty">Aucune séance enregistrée.</div>';
 }
-function removeWorkout(i){db.workouts.splice(i,1);saveDB();renderAll()}
+
+function removeWorkout(i){
+ db.workouts.splice(i,1);
+ saveDB();
+ renderAll();
+}
+
 function addMeasurement(){
  const weight=number("measureWeight");
  if(!weight){alert("Entre au minimum ton poids.");return}
- db.measurements.push({date:today(),weight,waist:number("measureWaist"),chest:number("measureChest"),arm:number("measureArm"),leg:number("measureLeg")});
- saveDB();["measureWeight","measureWaist","measureChest","measureArm","measureLeg"].forEach(id=>$(id).value="");renderAll();alert("Mesures enregistrées !");
+
+ db.measurements.push({
+  date:today(),
+  weight,
+  waist:number("measureWaist"),
+  chest:number("measureChest"),
+  arm:number("measureArm"),
+  leg:number("measureLeg")
+ });
+
+ saveDB();
+ ["measureWeight","measureWaist","measureChest","measureArm","measureLeg"].forEach(id=>$(id).value="");
+ renderAll();
+ alert("Mesures enregistrées !");
 }
+
 function renderMeasures(){
- $("measureList").innerHTML=db.measurements.length?[...db.measurements].reverse().map(m=>`<div class="item"><b>${safe(m.date)}</b><div class="small muted">Poids : ${fmt(m.weight)} kg · Taille : ${m.waist?fmt(m.waist)+" cm":"—"} · Poitrine : ${m.chest?fmt(m.chest)+" cm":"—"} · Bras : ${m.arm?fmt(m.arm)+" cm":"—"} · Cuisses : ${m.leg?fmt(m.leg)+" cm":"—"}</div></div>`).join(""):'<div class="empty">Aucune mesure enregistrée.</div>';
+ $("measureList").innerHTML=db.measurements.length?[...db.measurements].reverse().map(m=>`
+  <div class="item">
+   <b>${safe(m.date)}</b>
+   <div class="small muted">Poids : ${fmt(m.weight)} kg · Taille : ${m.waist?fmt(m.waist)+" cm":"—"} · Poitrine : ${m.chest?fmt(m.chest)+" cm":"—"} · Bras : ${m.arm?fmt(m.arm)+" cm":"—"} · Cuisses : ${m.leg?fmt(m.leg)+" cm":"—"}</div>
+  </div>`).join(""):'<div class="empty">Aucune mesure enregistrée.</div>';
 }
+
 function addSupplement(){
- const name=$("suppName").value.trim();if(!name){alert("Entre un nom de complément.");return}
- db.supplements.push({name,info:$("suppInfo").value.trim()});saveDB();$("suppName").value="";$("suppInfo").value="";renderAll();
+ const name=$("suppName").value.trim();
+ if(!name){alert("Entre un nom de complément.");return}
+
+ db.supplements.push({name,info:$("suppInfo").value.trim()});
+ saveDB();
+ $("suppName").value="";
+ $("suppInfo").value="";
+ renderAll();
 }
-function removeSupplement(i){db.supplements.splice(i,1);saveDB();renderAll()}
+
+function removeSupplement(i){
+ db.supplements.splice(i,1);
+ saveDB();
+ renderAll();
+}
+
 function renderSupplements(){
- $("suppList").innerHTML=db.supplements.length?db.supplements.map((s,i)=>`<div class="item row"><div><b>${safe(s.name)}</b><div class="small muted">${safe(s.info)}</div></div><button class="btn danger small" onclick="removeSupplement(${i})">Retirer</button></div>`).join(""):'<div class="empty">Aucun complément ajouté.</div>';
+ $("suppList").innerHTML=db.supplements.length?db.supplements.map((s,i)=>`
+  <div class="item row">
+   <div>
+    <b>${safe(s.name)}</b>
+    <div class="small muted">${safe(s.info)}</div>
+   </div>
+   <button class="btn danger small" onclick="removeSupplement(${i})">Retirer</button>
+  </div>`).join(""):'<div class="empty">Aucun complément ajouté.</div>';
 }
+
 function renderProfile(){
  const p=db.profile;
+
  $("profileDetails").innerHTML=`
  <div class="item row"><span class="muted">Prénom</span><b>${safe(p.name)}</b></div>
  <div class="item row"><span class="muted">Âge</span><b>${p.age} ans</b></div>
@@ -529,6 +826,7 @@ function renderProfile(){
  <div class="item row"><span class="muted">Objectif</span><b>${safe(p.goal)}</b></div>
  <div class="item row"><span class="muted">Priorité</span><b>${safe(p.priority)}</b></div>
  <div class="item row"><span class="muted">Fréquence</span><b>${safe(p.frequency)}</b></div>
+ <div class="item row"><span class="muted">Activité quotidienne</span><b>${safe(p.activity||"Non renseignée")}</b></div>
  <div class="item row"><span class="muted">Expérience</span><b>${safe(p.experience)}</b></div>
  <div class="item row"><span class="muted">Sport</span><b>${safe(p.sport)}</b></div>
  <div class="item row"><span class="muted">Alimentation</span><b>${safe(p.diet)}</b></div>
@@ -539,50 +837,115 @@ function renderProfile(){
  <div class="item"><span class="muted">Objectif personnel :</span> ${safe(p.personal||"Non renseigné")}</div>
  <div class="item"><span class="muted">Notes :</span> ${safe(p.notes||"Non renseigné")}</div>
  <div class="item"><span class="muted">Compléments déclarés :</span> ${safe((p.supplements||[]).join(", ")||"Aucun")}</div>`;
- $("editName").value=p.name;$("editHeight").value=p.height;$("editGoal").value=p.goal;$("editFrequency").value=p.frequency;
+
+ $("editName").value=p.name;
+ $("editHeight").value=p.height;
+ $("editGoal").value=p.goal;
+ $("editFrequency").value=p.frequency;
 }
-function editProfile(){$("editModal").classList.add("show")}
-function closeModal(){$("editModal").classList.remove("show")}
+
+function editProfile(){
+ $("editModal").classList.add("show");
+}
+
+function closeModal(){
+ $("editModal").classList.remove("show");
+}
+
 function saveProfile(){
- const height=number("editHeight"),name=$("editName").value.trim();
- if(!height||height<100||height>230||!name){alert("Vérifie ton prénom et ta taille.");return}
- db.profile.name=name;db.profile.height=height;db.profile.goal=$("editGoal").value;db.profile.frequency=$("editFrequency").value;
- saveDB();closeModal();renderAll();
+ const height=number("editHeight");
+ const name=$("editName").value.trim();
+
+ if(!height||height<100||height>230||!name){
+  alert("Vérifie ton prénom et ta taille.");
+  return;
+ }
+
+ db.profile.name=name;
+ db.profile.height=height;
+ db.profile.goal=$("editGoal").value;
+ db.profile.frequency=$("editFrequency").value;
+
+ saveDB();
+ closeModal();
+ renderAll();
 }
+
 function exportData(){
  const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"});
- const url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="nyzen-nutri-sauvegarde.json";a.click();URL.revokeObjectURL(url);
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="nyzen-nutri-sauvegarde.json";
+ a.click();
+ URL.revokeObjectURL(url);
 }
+
 function importData(event){
- const file=event.target.files[0];if(!file)return;
+ const file=event.target.files[0];
+ if(!file)return;
+
  const reader=new FileReader();
+
  reader.onload=()=>{
   try{
    const data=JSON.parse(reader.result);
    if(!data||typeof data!=="object"||!data.profile||!data.days)throw Error("Fichier invalide");
+
    if(!confirm("Remplacer les données actuelles par cette sauvegarde ?"))return;
-   db={...blankDB(),...data,days:data.days,targets:{...blankDB().targets,...data.targets}};
-   saveDB();location.reload();
-  }catch(e){alert("Impossible d'importer ce fichier. Vérifie qu'il s'agit d'une sauvegarde NYZEN NUTRI.")}
+
+   db={
+    ...blankDB(),
+    ...data,
+    days:data.days,
+    targets:{...blankDB().targets,...data.targets}
+   };
+
+   saveDB();
+   location.reload();
+
+  }catch(e){
+   alert("Impossible d'importer ce fichier. Vérifie qu'il s'agit d'une sauvegarde NYZEN NUTRI.");
+  }
  };
+
  reader.readAsText(file);
 }
+
 function resetApp(){
  if(!confirm("Effacer définitivement les données NYZEN NUTRI enregistrées sur cet appareil ?"))return;
- localStorage.removeItem(STORAGE_KEY);location.reload();
+ localStorage.removeItem(STORAGE_KEY);
+ location.reload();
 }
+
 function renderAll(){
  if(!db.profile)return;
+
  $("dateLabel").textContent=dateText();
- renderHome();renderNutrition();renderWater();renderWorkouts();renderMeasures();renderSupplements();renderProfile();
+
+ renderHome();
+ renderNutrition();
+ renderWater();
+ renderWorkouts();
+ renderMeasures();
+ renderSupplements();
+ renderProfile();
 }
+
 function init(){
  $("dateLabel").textContent=dateText();
- if(db.onboarded&&db.profile){startApp()}
- else{$("onboarding").classList.remove("hidden");$("mainApp").classList.add("hidden");$("tabs").classList.add("hidden")}
+
+ if(db.onboarded&&db.profile){
+  startApp();
+ }else{
+  $("onboarding").classList.remove("hidden");
+  $("mainApp").classList.add("hidden");
+  $("tabs").classList.add("hidden");
+ }
 }
+
 init();
+
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){
  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 }
