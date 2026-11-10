@@ -435,7 +435,7 @@ function calculateDailyCalories(){
  const age=Number(p.age);
  const weight=Number(p.weight);
  const height=Number(p.height);
- const sex=p.sex;
+ const sex=p.sex||"Homme";
  const activity=p.activity||"low";
 
  if(!age||!weight||!height)return null;
