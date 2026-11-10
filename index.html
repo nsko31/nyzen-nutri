@@ -289,5 +289,257 @@ function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:"appli
 function importData(){let f=importFile.files[0];if(!f){toast("Choisis un fichier JSON");return}let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x||typeof x!=="object")throw Error();db=x;save();loadProfile();render();toast("Sauvegarde restaurée")}catch(e){toast("Fichier invalide")}};r.readAsText(f)}
 init();
 </script>
+ 
+<style>
+#nz-water-launch{position:fixed;right:15px;bottom:100px;z-index:50;background:linear-gradient(135deg,#9b78ff,#c36be7);color:white;border:0;border-radius:18px;padding:15px 19px;font-weight:900;box-shadow:0 5px 25px #9b78ff55}
+#nz-water-panel,#nz-onboard{position:fixed;inset:0;background:#080810ee;z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.nz-modal{background:#171725;border:1px solid #39334f;border-radius:22px;padding:20px;width:100%;max-width:480px;max-height:88vh;overflow:auto;color:white}
+.nz-modal h2{font-size:23px}.nz-modal p{color:#aaa}
+.nz-modal label{display:block;color:#aaa;font-size:12px;margin:13px 0 6px}
+.nz-modal input,.nz-modal select,.nz-modal textarea{width:100%;padding:12px;border-radius:10px;background:#0b0b14;border:1px solid #39334f;color:white}
+.nz-modal button{margin-top:12px}
+.nz-water-number{font-size:37px;font-weight:900;color:#b99cff;margin:12px 0}
+.nz-actions{display:flex;gap:8px;flex-wrap:wrap}
+.nz-actions button{flex:1}
+.nz-step{display:none}.nz-step.active{display:block}
+</style>
+
+<button id="nz-water-launch" onclick="nzWaterOpen()">💧 EAU</button>
+
+<div id="nz-water-panel">
+ <div class="nz-modal">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+   <h2>Hydratation</h2>
+   <button class="btn secondary" onclick="nzWaterClose()">✕</button>
+  </div>
+  <p>Ton suivi d'eau quotidien</p>
+  <div class="nz-water-number" id="nz-water-total">0 ml</div>
+  <div class="progress"><div id="nz-water-progress"></div></div>
+  <p id="nz-water-history"></p>
+  <div class="nz-actions">
+   <button class="btn secondary" onclick="nzAddWater(150)">+150 ml</button>
+   <button class="btn secondary" onclick="nzAddWater(250)">+250 ml</button>
+   <button class="btn secondary" onclick="nzAddWater(500)">+500 ml</button>
+  </div>
+  <label>Quantité personnalisée (ml)</label>
+  <input type="number" id="nz-water-custom" placeholder="Ex : 350">
+  <button class="btn" style="width:100%" onclick="nzAddCustomWater()">Ajouter</button>
+  <p>Ton historique est conservé automatiquement sur cet appareil. Le repère de 2500 ml est indicatif, pas une obligation : les besoins varient selon les personnes et les journées.</p>
+ </div>
+</div>
+
+<div id="nz-onboard">
+ <div class="nz-modal">
+  <div class="logo">NYZEN <span>NUTRI</span></div>
+  <h2>Bienvenue dans ton espace.</h2>
+  <p>On va construire ton profil pour adapter ton suivi à tes habitudes et à tes entraînements.</p>
+  <div id="nz-step-label" class="tag">ÉTAPE 1 / 4</div>
+
+  <div class="nz-step active" id="nz-step-1">
+   <h2>Ton profil</h2>
+   <label>Ton prénom ou pseudo</label>
+   <input id="nz-name" placeholder="Comment t'appelles-tu ?">
+   <label>Âge (minimum 17 ans)</label>
+   <input id="nz-age" type="number" min="17" placeholder="17 ou plus">
+   <label>Taille en cm</label>
+   <input id="nz-height" type="number" placeholder="Ex : 175">
+   <label>Poids actuel en kg</label>
+   <input id="nz-weight" type="number" step=".1" placeholder="Ex : 65">
+   <label>Ton expérience en salle</label>
+   <select id="nz-experience">
+    <option>Débutant</option><option>Intermédiaire</option><option>Avancé</option>
+   </select>
+  </div>
+
+  <div class="nz-step" id="nz-step-2">
+   <h2>Ton objectif</h2>
+   <label>Objectif principal</label>
+   <select id="nz-goal">
+    <option>Prise de muscle</option>
+    <option>Maintien et forme</option>
+    <option>Améliorer mes habitudes</option>
+    <option>Développer ma force</option>
+   </select>
+   <label>Nombre d'entraînements par semaine</label>
+   <select id="nz-frequency">
+    <option>1 à 2 fois</option><option>3 fois</option>
+    <option selected>4 à 5 fois</option><option>6 fois ou plus</option>
+   </select>
+   <label>Durée moyenne d'une séance</label>
+   <select id="nz-duration">
+    <option>Moins de 45 minutes</option><option>45 à 60 minutes</option>
+    <option>1 h à 1 h 30</option><option>Plus de 1 h 30</option>
+   </select>
+   <label>Type d'entraînement</label>
+   <select id="nz-sport">
+    <option>Musculation</option><option>Musculation et cardio</option>
+    <option>Fitness</option><option>Autre</option>
+   </select>
+   <label>Jours habituels d'entraînement</label>
+   <input id="nz-days" placeholder="Ex : lundi, mardi, jeudi, samedi">
+  </div>
+
+  <div class="nz-step" id="nz-step-3">
+   <h2>Ton alimentation</h2>
+   <label>Combien de repas par jour ?</label>
+   <select id="nz-meals">
+    <option>2 repas</option><option selected>3 repas</option>
+    <option>4 repas</option><option>5 repas ou plus</option>
+   </select>
+   <label>Ton alimentation habituelle</label>
+   <select id="nz-diet">
+    <option>Variée</option><option>Végétarienne</option>
+    <option>Végétalienne</option><option>Autre</option>
+   </select>
+   <label>Allergies ou intolérances alimentaires</label>
+   <input id="nz-allergies" placeholder="Ex : lactose, arachides, aucune...">
+   <label>Aliments que tu aimes particulièrement</label>
+   <input id="nz-favorites" placeholder="Ex : poulet, riz, œufs...">
+   <label>Aliments que tu évites</label>
+   <input id="nz-avoid" placeholder="Facultatif">
+   <label>Utilises-tu des compléments ?</label>
+   <select id="nz-supplements">
+    <option>Non</option><option>Whey</option><option>Créatine</option>
+    <option>Whey et créatine</option><option>Autres compléments</option>
+   </select>
+  </div>
+
+  <div class="nz-step" id="nz-step-4">
+   <h2>Ton quotidien</h2>
+   <label>Sommeil moyen par nuit</label>
+   <select id="nz-sleep">
+    <option>Moins de 6 h</option><option>6 à 7 h</option>
+    <option>7 à 8 h</option><option>8 à 9 h</option><option>Plus de 9 h</option>
+   </select>
+   <label>Ton hydratation habituelle</label>
+   <select id="nz-hydration">
+    <option>Moins d'un litre</option><option>1 à 1,5 litre</option>
+    <option>1,5 à 2 litres</option><option>Plus de 2 litres</option>
+    <option>Je ne sais pas</option>
+   </select>
+   <label>Ton niveau d'énergie habituel</label>
+   <select id="nz-energy">
+    <option>Faible</option><option>Moyen</option><option>Bon</option>
+   </select>
+   <label>Ce que tu veux améliorer en priorité</label>
+   <textarea id="nz-priority" rows="3" placeholder="Ex : régularité, repas, progression en salle..."></textarea>
+   <p>Ton profil sert à personnaliser ton suivi. Il ne remplace pas un avis médical ou diététique. Pas de régime extrême ni de promesse de transformation rapide.</p>
+  </div>
+
+  <div class="nz-actions">
+   <button class="btn secondary" id="nz-back" onclick="nzStep(-1)" style="display:none">Retour</button>
+   <button class="btn" id="nz-next" onclick="nzStep(1)" style="width:100%">Continuer</button>
+  </div>
+ </div>
+</div>
+
+<script>
+let nzCurrentStep=1;
+
+function nzReadDB(){
+ try{return JSON.parse(localStorage.getItem("nyzen_nutri_v2")||"{}")}
+ catch(e){return {}}
+}
+function nzSaveDB(data){
+ localStorage.setItem("nyzen_nutri_v2",JSON.stringify(data));
+}
+function nzWaterOpen(){
+ document.getElementById("nz-water-panel").style.display="flex";
+ nzWaterRender();
+}
+function nzWaterClose(){
+ document.getElementById("nz-water-panel").style.display="none";
+}
+function nzAddWater(amount){
+ amount=Number(amount);
+ if(!Number.isFinite(amount)||amount<=0||amount>5000)return;
+ let data=nzReadDB();
+ data.water=data.water||[];
+ data.water.push({
+  date:new Date().toLocaleDateString("en-CA"),
+  ml:amount,
+  time:new Date().toLocaleTimeString("fr-BE",{hour:"2-digit",minute:"2-digit"})
+ });
+ nzSaveDB(data);
+ nzWaterRender();
+ if(typeof render==="function")render();
+}
+function nzAddCustomWater(){
+ let input=document.getElementById("nz-water-custom");
+ nzAddWater(input.value);
+ input.value="";
+}
+function nzWaterRender(){
+ let data=nzReadDB();
+ let date=new Date().toLocaleDateString("en-CA");
+ let entries=(data.water||[]).filter(x=>x.date===date);
+ let total=entries.reduce((sum,x)=>sum+Number(x.ml||0),0);
+ document.getElementById("nz-water-total").textContent=total.toLocaleString("fr-BE")+" ml";
+ document.getElementById("nz-water-progress").style.width=Math.min(100,total/2500*100)+"%";
+ document.getElementById("nz-water-history").textContent=
+ entries.length ? entries.map(x=>x.time+" : "+x.ml+" ml").join(" • ") : "Aucune eau enregistrée aujourd'hui.";
+}
+function nzStep(direction){
+ if(direction===1 && nzCurrentStep===1){
+  let age=Number(document.getElementById("nz-age").value);
+  if(!Number.isFinite(age)||age<17){
+   alert("L'âge minimum pour créer un profil NYZEN NUTRI est de 17 ans.");
+   return;
+  }
+  if(!document.getElementById("nz-height").value||!document.getElementById("nz-weight").value){
+   alert("Complète ta taille et ton poids.");
+   return;
+  }
+ }
+ nzCurrentStep+=direction;
+ nzCurrentStep=Math.max(1,Math.min(4,nzCurrentStep));
+ for(let i=1;i<=4;i++){
+  document.getElementById("nz-step-"+i).classList.toggle("active",i===nzCurrentStep);
+ }
+ document.getElementById("nz-step-label").textContent="ÉTAPE "+nzCurrentStep+" / 4";
+ document.getElementById("nz-back").style.display=nzCurrentStep===1?"none":"block";
+ let next=document.getElementById("nz-next");
+ next.textContent=nzCurrentStep===4?"Terminer mon inscription":"Continuer";
+ next.onclick=nzCurrentStep===4?nzFinish:()=>nzStep(1);
+}
+function nzFinish(){
+ let data=nzReadDB();
+ data.profile={
+  ...(data.profile||{}),
+  name:document.getElementById("nz-name").value,
+  age:document.getElementById("nz-age").value,
+  height:document.getElementById("nz-height").value,
+  weight:document.getElementById("nz-weight").value,
+  experience:document.getElementById("nz-experience").value,
+  goal:document.getElementById("nz-goal").value,
+  training:document.getElementById("nz-frequency").value,
+  duration:document.getElementById("nz-duration").value,
+  sport:document.getElementById("nz-sport").value,
+  days:document.getElementById("nz-days").value,
+  meals:document.getElementById("nz-meals").value,
+  diet:document.getElementById("nz-diet").value,
+  allergies:document.getElementById("nz-allergies").value,
+  favorites:document.getElementById("nz-favorites").value,
+  avoid:document.getElementById("nz-avoid").value,
+  supplements:document.getElementById("nz-supplements").value,
+  sleep:document.getElementById("nz-sleep").value,
+  hydration:document.getElementById("nz-hydration").value,
+  energy:document.getElementById("nz-energy").value,
+  priority:document.getElementById("nz-priority").value,
+  onboardingDone:true
+ };
+ nzSaveDB(data);
+ document.getElementById("nz-onboard").style.display="none";
+ alert("Bienvenue dans NYZEN NUTRI !");
+ location.reload();
+}
+(function(){
+ let data=nzReadDB();
+ if(!data.profile?.onboardingDone){
+  document.getElementById("nz-onboard").style.display="flex";
+ }
+ nzWaterRender();
+})();
+</script>
 </body>
 </html>
