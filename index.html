@@ -3,543 +3,596 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#09090f">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#090912">
 <title>NYZEN NUTRI</title>
 <style>
-:root{--bg:#09090f;--panel:#12121d;--panel2:#191927;--purple:#9b78ff;--pink:#d47cff;--text:#f7f5ff;--muted:#9290a6;--line:#29283b;--green:#63dfac}
+:root{--bg:#090912;--card:#141421;--card2:#1c1b2b;--line:#302d43;--purple:#a58aff;--pink:#d28cff;--text:#f8f6ff;--muted:#9693aa;--green:#65dfac;--red:#ff8196}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:90px}
-button,input,select{font:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:100px}
+button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-header{padding:24px 20px 12px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:21px;font-weight:900;letter-spacing:2px}.logo span{color:var(--purple)}
-.small{color:var(--muted);font-size:12px}
-main{max-width:760px;margin:auto;padding:8px 16px}
+header{height:66px;padding:0 19px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:sticky;top:0;background:#090912ed;backdrop-filter:blur(15px);z-index:10}
+.logo{font-size:21px;font-weight:950;letter-spacing:2px}.logo span{color:var(--purple)}
+main{max-width:760px;margin:auto;padding:15px}
 .page{display:none}.page.active{display:block}
-h1{font-size:26px;margin:12px 0 5px}h2{font-size:17px;margin:0 0 14px}
-p{color:var(--muted);font-size:13px;line-height:1.5}
-.card{background:linear-gradient(145deg,#171725,#11111a);border:1px solid var(--line);border-radius:19px;padding:17px;margin:12px 0}
-.hero{background:linear-gradient(135deg,#38265f,#19132e 65%,#24163a);border:1px solid #554080}
-.hero h1{font-size:25px}.hero p{color:#d1c5ef}
+h1{font-size:27px;margin:12px 0 5px;letter-spacing:-.7px}
+h2{font-size:17px;margin:0 0 13px}
+h3{font-size:14px;margin:12px 0 8px}
+p{font-size:13px;color:var(--muted);line-height:1.55}
+small,.muted{color:var(--muted)}
+.card{background:linear-gradient(145deg,#191827,#11111b);border:1px solid var(--line);border-radius:19px;padding:17px;margin:12px 0}
+.hero{background:linear-gradient(135deg,#37245d,#1b1530 65%,#21162e);border-color:#554080;padding:21px}
+.hero p{color:#d3c8ed}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.stat{background:var(--panel2);border-radius:15px;padding:14px}
-.stat strong{display:block;font-size:22px;margin:7px 0}.stat small{color:var(--muted)}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.stat{background:var(--card2);border-radius:15px;padding:13px;min-width:0}
+.stat strong{font-size:22px;display:block;margin:8px 0}
+.stat small{font-size:11px}
 .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.purple{color:var(--purple)}.green{color:var(--green)}
-.progress{height:8px;border-radius:10px;background:#29283a;overflow:hidden;margin-top:10px}
-.progress div{height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:10px;width:0%}
-.btn{border:0;border-radius:12px;background:linear-gradient(120deg,#9b78ff,#bd72df);color:white;padding:12px 15px;font-weight:750}
-.btn.secondary{background:#27243a;color:#ddd4ff;border:1px solid #39334f}
-.btn.danger{background:#48232d;color:#ffb8c3}
-.btn.smallbtn{padding:9px 12px;font-size:12px}
-input,select{background:#0c0c15;color:white;border:1px solid var(--line);padding:12px;border-radius:11px;width:100%;outline:none;min-width:0}
-input:focus,select:focus{border-color:var(--purple)}
-.field{margin:10px 0}.field label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
-.formrow{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-nav{position:fixed;bottom:0;left:0;right:0;background:#10101aee;backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 2px calc(9px + env(safe-area-inset-bottom));z-index:10}
-nav button{background:none;border:0;color:var(--muted);font-size:10px;display:flex;flex-direction:column;gap:5px;align-items:center;min-width:0}
-nav button b{font-size:20px;font-weight:500}nav button.active{color:var(--purple)}
-.food{padding:12px 0;border-bottom:1px solid var(--line)}
-.food:last-child{border:0}
-.tag{font-size:10px;color:#c6b5ff;background:#302548;padding:5px 8px;border-radius:20px}
-.waterbig{font-size:34px;font-weight:850}
+.btn{border:0;border-radius:12px;background:linear-gradient(120deg,#9874ff,#c079e9);color:white;padding:12px 15px;font-weight:750}
+.btn.secondary{background:#29253d;border:1px solid #413957;color:#e5dcff}
+.btn.danger{background:#482630;color:#ffbdc8}
+.btn.full{width:100%}
+.btn.mini{padding:8px 11px;font-size:12px}
+input,select,textarea{width:100%;background:#0b0b14;border:1px solid var(--line);border-radius:11px;padding:12px;color:white;outline:none;min-width:0}
+input:focus,select:focus,textarea:focus{border-color:var(--purple)}
+label{font-size:12px;color:var(--muted);display:block;margin:12px 0 6px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.progress{height:8px;background:#302d40;border-radius:20px;overflow:hidden;margin:10px 0}
+.progress div{height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));width:0%;border-radius:20px;transition:width .3s}
+.pill{font-size:10px;letter-spacing:.5px;padding:6px 9px;border-radius:30px;background:#34284d;color:#d7c8ff}
+.foodrow{padding:12px 0;border-bottom:1px solid var(--line)}
+.foodrow:last-child{border:0}
 .quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.quick button{flex:1;min-width:65px}
-.result{background:#1a1928;border:1px solid var(--line);padding:12px;border-radius:12px;margin-top:9px}
+.quick button{flex:1;min-width:70px}
+.big{font-size:35px;font-weight:900;color:var(--purple);margin:8px 0}
+.empty{text-align:center;padding:20px;color:var(--muted);font-size:13px}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:20;background:#11111dee;backdrop-filter:blur(18px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 2px calc(9px + env(safe-area-inset-bottom))}
+nav button{background:none;border:0;color:var(--muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+nav button b{font-size:20px;font-weight:500}
+nav button.active{color:var(--purple)}
+nav button.water-tab{color:#85caff}
+.tagline{font-size:12px;color:var(--muted)}
 canvas{width:100%;height:170px}
-.empty{color:var(--muted);font-size:13px;text-align:center;padding:20px}
-#toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:#302548;padding:11px 17px;border-radius:12px;display:none;z-index:20;font-size:13px}
-@media(min-width:650px){main{padding:12px 24px}.grid.four{grid-template-columns:repeat(4,1fr)}}
+#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:80;background:#302548;padding:12px 18px;border-radius:12px;display:none;font-size:13px;max-width:90%;text-align:center}
+.overlay{position:fixed;inset:0;background:#07070df5;z-index:50;display:none;align-items:center;justify-content:center;padding:13px}
+.modal{background:#171725;border:1px solid #413957;border-radius:23px;padding:20px;width:100%;max-width:500px;max-height:94dvh;overflow:auto}
+.modal h2{font-size:22px;margin:15px 0 7px}
+.step{display:none}.step.active{display:block}
+.stepdots{display:flex;gap:5px;margin:15px 0}
+.stepdots span{height:4px;flex:1;border-radius:5px;background:#39354b}
+.stepdots span.on{background:var(--purple)}
+video{width:100%;border-radius:14px;background:#000}
+@media(min-width:600px){main{padding:22px}.grid.four{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
-<header><div class="logo">NYZEN <span>NUTRI</span></div><div class="small" id="today"></div></header>
+<header>
+ <div class="logo">NYZEN <span>NUTRI</span></div>
+ <span class="tagline" id="headerDate"></span>
+</header>
+
 <main>
 <section class="page active" id="home">
  <div class="card hero">
-  <div class="small">TON ESPACE • NYZEN NUTRI</div>
+  <div class="pill">TON ESPACE PERSONNEL</div>
   <h1>Construis ta progression.</h1>
-  <p>Chaque repas, chaque séance et chaque habitude compte. Avance à ton rythme.</p>
-  <div class="row"><span class="tag">OBJECTIF : PRISE DE MUSCLE</span><span>✦ V2</span></div>
+  <p id="welcomeText">Une meilleure routine commence aujourd'hui.</p>
+  <div class="row"><span class="tagline">NYZEN NUTRI V3</span><span>✦</span></div>
  </div>
- <h2>Ton tableau de bord</h2>
+ <h2>Vue d'ensemble</h2>
  <div class="grid">
-  <div class="stat"><small>Calories consommées</small><strong id="homeCal">0</strong><small>kcal aujourd'hui</small></div>
-  <div class="stat"><small>Protéines</small><strong id="homeProtein">0 g</strong><small>consommées</small></div>
-  <div class="stat"><small>Eau bue</small><strong id="homeWater">0 ml</strong><small id="waterPercent">Suivi quotidien</small></div>
-  <div class="stat"><small>Repas enregistrés</small><strong id="homeMeals">0</strong><small>aujourd'hui</small></div>
+  <div class="stat"><small>Calories</small><strong id="dashCal">0</strong><small>kcal enregistrées</small></div>
+  <div class="stat"><small>Protéines</small><strong id="dashProtein">0 g</strong><small>apports du jour</small></div>
+  <div class="stat"><small>Glucides</small><strong id="dashCarbs">0 g</strong><small>apports du jour</small></div>
+  <div class="stat"><small>Lipides</small><strong id="dashFat">0 g</strong><small>apports du jour</small></div>
  </div>
  <div class="card">
-  <div class="row"><h2>Hydratation</h2><span class="tag">EAU</span></div>
-  <div class="waterbig" id="waterBig">0 ml</div>
-  <div class="progress"><div id="waterBar"></div></div>
-  <div class="quick">
-   <button class="btn secondary smallbtn" onclick="addWater(150)">+150 ml</button>
-   <button class="btn secondary smallbtn" onclick="addWater(250)">+250 ml</button>
-   <button class="btn secondary smallbtn" onclick="addWater(500)">+500 ml</button>
-  </div>
-  <div class="field"><input id="customWater" type="number" min="1" placeholder="Quantité personnalisée en ml"></div>
-  <button class="btn smallbtn" onclick="customWater()">Ajouter de l'eau</button>
+  <div class="row"><h2>Hydratation</h2><span class="pill">EAU</span></div>
+  <div class="big" id="dashWater">0 ml</div>
+  <div class="progress"><div id="dashWaterBar"></div></div>
+  <p id="dashWaterText">Enregistre tes boissons au fil de la journée.</p>
+  <button class="btn full" onclick="go('water')">Ouvrir mon suivi d'eau</button>
  </div>
  <div class="card">
-  <div class="row"><h2>Macros du jour</h2><span class="small">Total alimentaire</span></div>
-  <div id="macroSummary"></div>
+  <h2>Répartition nutritionnelle</h2>
+  <div id="dashMacros"></div>
  </div>
  <div class="card">
-  <h2>Le conseil NYZEN du jour</h2>
+  <h2>Ton conseil du jour</h2>
   <p id="dailyTip"></p>
  </div>
  <div class="card">
   <h2>Raccourcis</h2>
   <div class="quick">
-   <button class="btn smallbtn" onclick="showPage('food')">＋ Ajouter un repas</button>
-   <button class="btn secondary smallbtn" onclick="showPage('scanner')">▣ Scanner</button>
-   <button class="btn secondary smallbtn" onclick="showPage('training')">＋ Séance</button>
+   <button class="btn mini" onclick="go('nutrition')">+ Aliment</button>
+   <button class="btn secondary mini" onclick="go('scanner')">Scanner</button>
+   <button class="btn secondary mini" onclick="go('training')">+ Séance</button>
   </div>
  </div>
 </section>
 
-<section class="page" id="food">
- <h1>Nutrition</h1><p>Enregistre tes aliments et suis tes apports au quotidien.</p>
+<section class="page" id="nutrition">
+ <h1>Nutrition</h1><p>Enregistre tes repas, portions et apports alimentaires.</p>
  <div class="card">
   <h2>Ajouter un aliment</h2>
-  <div class="field"><label>Nom de l'aliment</label><input id="foodName" placeholder="Ex : Poulet, riz, banane..."></div>
-  <div class="formrow">
-   <div class="field"><label>Quantité (g)</label><input id="foodQty" type="number" value="100"></div>
-   <div class="field"><label>Calories pour 100 g</label><input id="foodCal" type="number" placeholder="kcal"></div>
-   <div class="field"><label>Protéines / 100 g</label><input id="foodP" type="number" step=".1" placeholder="g"></div>
-   <div class="field"><label>Glucides / 100 g</label><input id="foodC" type="number" step=".1" placeholder="g"></div>
-   <div class="field"><label>Lipides / 100 g</label><input id="foodF" type="number" step=".1" placeholder="g"></div>
-   <div class="field"><label>Fibres / 100 g</label><input id="foodFiber" type="number" step=".1" placeholder="g"></div>
+  <label>Nom</label><input id="fName" placeholder="Poulet, riz, banane...">
+  <div class="formgrid">
+   <div><label>Quantité (g/ml)</label><input id="fQty" type="number" value="100"></div>
+   <div><label>Calories / 100 g</label><input id="fCal" type="number" placeholder="kcal"></div>
+   <div><div><label>Protéines / 100 g</label><input id="fP" type="number" step=".1" placeholder="g"></div></div>
+   <div><label>Glucides / 100 g</label><input id="fC" type="number" step=".1" placeholder="g"></div>
+   <div><label>Lipides / 100 g</label><input id="fF" type="number" step=".1" placeholder="g"></div>
+   <div><label>Fibres / 100 g</label><input id="fFiber" type="number" step=".1" placeholder="g"></div>
   </div>
-  <div class="field"><label>Repas</label><select id="mealType"><option>Petit-déjeuner</option><option>Déjeuner</option><option>Collation</option><option>Dîner</option><option>Autre</option></select></div>
-  <button class="btn" onclick="addFood()">Enregistrer l'aliment</button>
+  <label>Repas</label>
+  <select id="fMeal"><option>Petit-déjeuner</option><option>Déjeuner</option><option>Collation</option><option>Dîner</option><option>Autre</option></select>
+  <button class="btn full" style="margin-top:14px" onclick="addFood()">Enregistrer l'aliment</button>
  </div>
  <div class="card">
-  <div class="row"><h2>Journal alimentaire</h2><span class="tag" id="foodDate"></span></div>
+  <div class="row"><h2>Journal alimentaire</h2><input type="date" id="foodDate" style="max-width:145px" onchange="render()"></div>
   <div id="foodList"></div>
+  <div class="progress"><div id="foodProgress"></div></div>
+  <div id="foodTotals"></div>
  </div>
- <div class="card"><h2>Totaux nutritionnels</h2><div id="foodTotals"></div></div>
+ <div class="card">
+  <h2>Recherche de produits</h2>
+  <label>Rechercher un produit</label><input id="productSearch" placeholder="Ex : céréales, Delhaize, Danone...">
+  <button class="btn secondary full" onclick="searchFoods()">Rechercher dans Open Food Facts</button>
+  <div id="productResults"></div>
+ </div>
+</section>
+
+<section class="page" id="water">
+ <h1>Hydratation</h1><p>Ton suivi quotidien de l'eau.</p>
+ <div class="card hero">
+  <span class="pill">TOTAL AUJOURD'HUI</span>
+  <div class="big" id="waterTotal">0 ml</div>
+  <div class="progress"><div id="waterProgress"></div></div>
+  <p id="waterHint">Les besoins varient selon l'activité, la chaleur et les personnes.</p>
+ </div>
+ <div class="card">
+  <h2>Ajouter rapidement</h2>
+  <div class="quick">
+   <button class="btn secondary" onclick="addWater(150)">+150 ml</button>
+   <button class="btn secondary" onclick="addWater(250)">+250 ml</button>
+   <button class="btn secondary" onclick="addWater(500)">+500 ml</button>
+  </div>
+  <label>Quantité personnalisée (ml)</label>
+  <input id="waterCustom" type="number" placeholder="Ex : 350">
+  <button class="btn full" style="margin-top:12px" onclick="addCustomWater()">Ajouter ma quantité</button>
+ </div>
+ <div class="card">
+  <h2>Historique d'aujourd'hui</h2>
+  <div id="waterHistory"></div>
+ </div>
+ <div class="card">
+  <h2>Historique des 7 derniers jours</h2>
+  <div id="waterWeek"></div>
+ </div>
 </section>
 
 <section class="page" id="scanner">
- <h1>Scanner alimentaire</h1><p>Recherche un produit belge ou international grâce à son code-barres.</p>
+ <h1>Scanner alimentaire</h1><p>Recherche des produits disponibles en Belgique et ailleurs.</p>
  <div class="card">
-  <h2>Scanner avec la caméra</h2>
-  <video id="video" playsinline style="width:100%;border-radius:13px;display:none;background:#000"></video>
+  <h2>Scanner un code-barres</h2>
+  <video id="camera" playsinline style="display:none"></video>
   <div class="quick">
-   <button class="btn" onclick="startScanner()">Activer la caméra</button>
-   <button class="btn secondary" onclick="stopScanner()">Arrêter</button>
+   <button class="btn" onclick="startCamera()">Activer caméra</button>
+   <button class="btn secondary" onclick="stopCamera()">Arrêter</button>
   </div>
-  <p id="cameraStatus">La caméra nécessite une connexion HTTPS et une autorisation.</p>
+  <p id="cameraInfo">Autorise l'accès à la caméra si ton navigateur le demande.</p>
+  <label>Ou saisis le code-barres</label>
+  <input id="barcodeInput" placeholder="EAN / code-barres">
+  <button class="btn full" style="margin-top:10px" onclick="lookupBarcode()">Chercher le produit</button>
+  <div id="barcodeResult"></div>
  </div>
  <div class="card">
-  <h2>Rechercher un produit</h2>
-  <div class="field"><input id="barcode" placeholder="Code-barres (EAN)"></div>
-  <button class="btn" onclick="lookupBarcode()">Chercher le code-barres</button>
-  <div class="field"><input id="searchProduct" placeholder="Ex : Danone, Nutella, Delhaize..."></div>
-  <button class="btn secondary" onclick="searchProducts()">Rechercher par nom</button>
-  <div id="scanResults"></div>
+  <h2>Recherche par nom</h2>
+  <input id="scannerSearch" placeholder="Nom du produit">
+  <button class="btn secondary full" style="margin-top:10px" onclick="scannerSearch()">Rechercher</button>
+  <div id="scannerResults"></div>
  </div>
- <p>Les données proviennent d'Open Food Facts. Vérifie toujours les valeurs avec l'emballage : certaines fiches peuvent être incomplètes ou erronées.</p>
+ <p>Les valeurs sont celles de la base Open Food Facts. Vérifie les informations sur l'emballage : les fiches peuvent être incomplètes.</p>
 </section>
 
 <section class="page" id="training">
- <h1>Entraînement</h1><p>Garde une trace de tes séances et de tes performances.</p>
+ <h1>Entraînement</h1><p>Note tes séances et suis tes performances dans le temps.</p>
  <div class="card">
-  <h2>Nouvelle séance</h2>
-  <div class="field"><label>Nom de la séance</label><input id="sessionName" placeholder="Ex : Pecs / Triceps"></div>
-  <div class="field"><label>Exercices et performances</label><input id="sessionDetails" placeholder="Développé couché : 3 x 10 à 40 kg"></div>
-  <div class="field"><label>Durée en minutes</label><input id="sessionDuration" type="number" placeholder="60"></div>
-  <button class="btn" onclick="addSession()">Enregistrer la séance</button>
+  <h2>Créer une séance</h2>
+  <label>Nom de la séance</label><input id="tName" placeholder="Pecs / Triceps">
+  <label>Exercices</label><textarea id="tExercises" rows="4" placeholder="Développé couché — 3 x 10 — 40 kg&#10;Écartés — 3 x 12 — 10 kg"></textarea>
+  <div class="formgrid">
+   <div><label>Durée (minutes)</label><input id="tDuration" type="number" placeholder="60"></div>
+   <div><label>Ressenti</label><select id="tFeeling"><option>Très bien</option><option>Bien</option><option>Moyen</option><option>Fatigué</option></select></div>
+  </div>
+  <button class="btn full" style="margin-top:12px" onclick="addTraining()">Enregistrer la séance</button>
  </div>
- <div class="card"><h2>Historique des séances</h2><div id="sessionList"></div></div>
+ <div class="card">
+  <h2>Historique</h2><div id="trainingHistory"></div>
+ </div>
 </section>
 
 <section class="page" id="progress">
- <h1>Progression</h1><p>Observe tes évolutions sans te comparer aux autres.</p>
+ <h1>Progression</h1><p>Observe tes évolutions avec des données régulières.</p>
  <div class="card">
-  <h2>Poids corporel</h2>
-  <div class="formrow">
-   <div class="field"><label>Poids (kg)</label><input id="weightInput" type="number" step=".1" placeholder="Ex : 60"></div>
-   <div class="field"><label>Date</label><input id="weightDate" type="date"></div>
+  <h2>Suivi du poids</h2>
+  <div class="formgrid">
+   <div><label>Poids (kg)</label><input id="weightInput" type="number" step=".1" placeholder="60"></div>
+   <div><label>Date</label><input id="weightDate" type="date"></div>
   </div>
-  <button class="btn" onclick="addWeight()">Enregistrer</button>
-  <div style="margin-top:15px"><canvas id="weightChart" width="600" height="220"></canvas></div>
-  <div id="weightList"></div>
+  <button class="btn full" onclick="addWeight()">Enregistrer mon poids</button>
+  <canvas id="weightChart" width="600" height="220"></canvas>
+  <div id="weightHistory"></div>
  </div>
  <div class="card">
-  <h2>Mensurations (cm)</h2>
-  <div class="formrow">
-   <div class="field"><label>Bras</label><input id="arm" type="number" step=".1" placeholder="Bras"></div>
-   <div class="field"><label>Poitrine</label><input id="chest" type="number" step=".1" placeholder="Poitrine"></div>
-   <div class="field"><label>Taille</label><input id="waist" type="number" step=".1" placeholder="Taille"></div>
-   <div class="field"><label>Cuisse</label><input id="thigh" type="number" step=".1" placeholder="Cuisse"></div>
+  <h2>Mensurations</h2>
+  <div class="formgrid">
+   <div><label>Bras (cm)</label><input id="mArm" type="number" step=".1"></div>
+   <div><label>Poitrine (cm)</label><input id="mChest" type="number" step=".1"></div>
+   <div><label>Taille (cm)</label><input id="mWaist" type="number" step=".1"></div>
+   <div><label>Cuisse (cm)</label><input id="mThigh" type="number" step=".1"></div>
   </div>
-  <button class="btn" onclick="addMeasurements()">Enregistrer les mensurations</button>
-  <div id="measureList"></div>
+  <button class="btn full" onclick="addMeasure()">Enregistrer les mensurations</button>
+  <div id="measureHistory"></div>
  </div>
  <div class="card">
   <h2>Bilan quotidien</h2>
-  <div class="field"><label>Sommeil (heures)</label><input id="sleep" type="number" step=".5" placeholder="8"></div>
-  <div class="field"><label>Énergie</label><select id="energy"><option>Bonne</option><option>Moyenne</option><option>Faible</option></select></div>
-  <div class="field"><label>Humeur</label><select id="mood"><option>Motivé</option><option>Normal</option><option>Fatigué</option></select></div>
-  <div class="field"><label>Notes</label><input id="notes" placeholder="Comment s'est passée ta journée ?"></div>
-  <button class="btn" onclick="saveCheckin()">Enregistrer le bilan</button>
-  <div id="checkinList"></div>
+  <label>Sommeil (heures)</label><input id="cSleep" type="number" step=".5" placeholder="8">
+  <label>Énergie</label><select id="cEnergy"><option>Bonne</option><option>Moyenne</option><option>Faible</option></select>
+  <label>Humeur</label><select id="cMood"><option>Motivé</option><option>Normale</option><option>Fatigué</option></select>
+  <label>Commentaire</label><textarea id="cNote" rows="2" placeholder="Notes sur la journée..."></textarea>
+  <button class="btn full" onclick="addCheckin()">Enregistrer le bilan</button>
+  <div id="checkinHistory"></div>
  </div>
 </section>
 
-<section class="page" id="supplements">
- <h1>Compléments</h1><p>Un journal personnel pour noter ce que tu utilises. Les compléments ne remplacent ni une alimentation variée ni le sommeil.</p>
+<section class="page" id="more">
+ <h1>Mon espace</h1><p>Compléments, habitudes et préférences personnelles.</p>
  <div class="card">
-  <h2>Ajouter au journal</h2>
-  <div class="field"><label>Produit</label><select id="suppName"><option>Whey</option><option>Créatine</option><option>Oméga-3</option><option>Vitamine D</option><option>Magnésium</option><option>Multivitamines</option><option>Autre</option></select></div>
-  <div class="field"><label>Marque / référence</label><input id="suppBrand" placeholder="Facultatif"></div>
-  <div class="field"><label>Informations de l'étiquette / notes</label><input id="suppNote" placeholder="Ce qui est indiqué sur le produit"></div>
-  <button class="btn" onclick="addSupplement()">Ajouter au journal</button>
+  <h2>Journal des compléments</h2>
+  <label>Produit</label>
+  <select id="sName"><option>Whey</option><option>Créatine</option><option>Oméga-3</option><option>Magnésium</option><option>Vitamine D</option><option>Multivitamines</option><option>Autre</option></select>
+  <label>Marque / référence</label><input id="sBrand" placeholder="Facultatif">
+  <label>Notes / informations de l'étiquette</label><input id="sNote" placeholder="Facultatif">
+  <button class="btn full" onclick="addSupplement()">Ajouter au journal</button>
+  <div id="supplementHistory"></div>
+  <p>Les compléments ne sont pas obligatoires. Pour les mineurs, leur utilisation doit être discutée avec un professionnel de santé.</p>
  </div>
- <div class="card"><h2>Mon journal</h2><div id="suppList"></div></div>
- <p>Si tu es mineur, demande conseil à un médecin ou à un diététicien avant d'utiliser des compléments, notamment pour vérifier leur utilité et leur sécurité.</p>
+ <div class="card">
+  <h2>Mes habitudes</h2>
+  <div id="habitList"></div>
+  <button class="btn secondary full" onclick="saveHabits()">Sauvegarder mes habitudes</button>
+ </div>
 </section>
 
-<section class="page" id="settings">
- <h1>Mon profil</h1><p>Configure tes informations personnelles.</p>
+<section class="page" id="profile">
+ <h1>Mon profil</h1><p>Modifie tes informations et tes préférences.</p>
  <div class="card">
-  <h2>Mes informations</h2>
-  <div class="formrow">
-   <div class="field"><label>Prénom / pseudo</label><input id="profileName" placeholder="Ton pseudo"></div>
-   <div class="field"><label>Âge</label><input id="profileAge" type="number" placeholder="Âge"></div>
-   <div class="field"><label>Taille (cm)</label><input id="profileHeight" type="number" placeholder="Taille"></div>
-   <div class="field"><label>Poids actuel (kg)</label><input id="profileWeight" type="number" step=".1" placeholder="Poids"></div>
+  <h2>Informations personnelles</h2>
+  <label>Prénom / pseudo</label><input id="pName">
+  <div class="formgrid">
+   <div><label>Âge</label><input id="pAge" type="number" min="17"></div>
+   <div><label>Taille (cm)</label><input id="pHeight" type="number"></div>
+   <div><label>Poids (kg)</label><input id="pWeight" type="number" step=".1"></div>
+   <div><label>Expérience</label><select id="pExperience"><option>Débutant</option><option>Intermédiaire</option><option>Avancé</option></select></div>
   </div>
-  <div class="field"><label>Objectif</label><select id="profileGoal"><option>Prise de muscle</option><option>Maintien et forme</option><option>Améliorer mes habitudes</option></select></div>
-  <div class="field"><label>Entraînements par semaine</label><select id="profileTraining"><option>1 à 2</option><option>3</option><option selected>4 à 5</option><option>6 ou plus</option></select></div>
-  <button class="btn" onclick="saveProfile()">Sauvegarder mon profil</button>
+  <label>Objectif</label><select id="pGoal"><option>Prise de muscle</option><option>Maintien et forme</option><option>Améliorer mes habitudes</option><option>Développer ma force</option></select>
+  <label>Entraînements par semaine</label><select id="pTraining"><option>1 à 2 fois</option><option>3 fois</option><option>4 à 5 fois</option><option>6 fois ou plus</option></select>
+  <button class="btn full" onclick="saveProfile()">Enregistrer mon profil</button>
  </div>
  <div class="card">
-  <h2>Mes données</h2>
-  <p>Tes informations sont enregistrées localement sur cet appareil.</p>
-  <button class="btn secondary" onclick="exportData()">Exporter mes données</button>
-  <div class="field"><label>Restaurer une sauvegarde JSON</label><input type="file" id="importFile" accept=".json"></div>
-  <button class="btn secondary" onclick="importData()">Importer une sauvegarde</button>
-  <p>Attention : effacer les données du navigateur peut supprimer ton historique si tu n'as pas fait de sauvegarde.</p>
+  <h2>Mes préférences alimentaires</h2>
+  <label>Nombre de repas</label><select id="pMeals"><option>2 repas</option><option>3 repas</option><option>4 repas</option><option>5 repas ou plus</option></select>
+  <label>Type d'alimentation</label><select id="pDiet"><option>Variée</option><option>Végétarienne</option><option>Végétalienne</option><option>Autre</option></select>
+  <label>Allergies / intolérances</label><input id="pAllergies">
+  <label>Aliments préférés</label><input id="pFavorites">
+  <label>Aliments évités</label><input id="pAvoid">
+  <label>Sommeil habituel</label><select id="pSleep"><option>Moins de 6 h</option><option>6 à 7 h</option><option>7 à 8 h</option><option>8 à 9 h</option><option>Plus de 9 h</option></select>
+  <label>Hydratation habituelle</label><select id="pHydration"><option>Moins d'un litre</option><option>1 à 1,5 litre</option><option>1,5 à 2 litres</option><option>Plus de 2 litres</option><option>Je ne sais pas</option></select>
+  <label>Priorité actuelle</label><textarea id="pPriority" rows="3"></textarea>
+  <button class="btn full" onclick="saveProfile()">Enregistrer les préférences</button>
+ </div>
+ <div class="card">
+  <h2>Sauvegarde de mes données</h2>
+  <p>Tes informations restent dans le stockage de ton navigateur. Exporte régulièrement une copie.</p>
+  <button class="btn secondary full" onclick="exportData()">Exporter mes données</button>
+  <label>Importer une sauvegarde JSON</label><input id="importInput" type="file" accept=".json">
+  <button class="btn secondary full" onclick="importData()">Importer</button>
  </div>
 </section>
 </main>
 
 <nav>
-<button class="active" data-page="home" onclick="showPage('home')"><b>⌂</b>Accueil</button>
-<button data-page="food" onclick="showPage('food')"><b>◉</b>Nutrition</button>
-<button data-page="scanner" onclick="showPage('scanner')"><b>▣</b>Scanner</button>
-<button data-page="training" onclick="showPage('training')"><b>↗</b>Salle</button>
-<button data-page="progress" onclick="showPage('progress')"><b>◷</b>Suivi</button>
-<button data-page="supplements" onclick="showPage('supplements')"><b>✧</b>Plus</button>
-<button data-page="settings" onclick="showPage('settings')"><b>⚙</b>Profil</button>
+ <button class="active" data-id="home" onclick="go('home')"><b>⌂</b>Accueil</button>
+ <button data-id="nutrition" onclick="go('nutrition')"><b>◉</b>Nutrition</button>
+ <button class="water-tab" data-id="water" onclick="go('water')"><b>💧</b>Eau</button>
+ <button data-id="scanner" onclick="go('scanner')"><b>▣</b>Scanner</button>
+ <button data-id="training" onclick="go('training')"><b>↗</b>Salle</button>
+ <button data-id="progress" onclick="go('progress')"><b>◷</b>Suivi</button>
+ <button data-id="more" onclick="go('more')"><b>✧</b>Plus</button>
 </nav>
+
 <div id="toast"></div>
 
-<script>
-const KEY="nyzen_nutri_v2";
-const today=()=>new Date().toLocaleDateString("en-CA");
-let db=JSON.parse(localStorage.getItem(KEY)||"{}");
-function init(){["foods","water","sessions","weights","measures","supplements","checkins"].forEach(k=>db[k]??=[]);db.profile??={};save();document.getElementById("today").textContent=new Date().toLocaleDateString("fr-BE",{weekday:"short",day:"numeric",month:"short"});document.getElementById("foodDate").textContent=new Date().toLocaleDateString("fr-BE");document.getElementById("weightDate").value=today();loadProfile();render();document.getElementById("dailyTip").textContent=tips[new Date().getDate()%tips.length]}
-const tips=["La régularité compte davantage qu'une journée parfaite. Continue à construire tes habitudes.","Pense à bien récupérer : le muscle se construit aussi en dehors de la salle.","Mange suffisamment et varie tes aliments pour soutenir tes entraînements.","Une bonne séance commence par un échauffement progressif.","Hydrate-toi régulièrement au fil de la journée.","Note tes performances : tu verras tes progrès sur la durée.","Ne néglige pas le sommeil. Il participe à ta récupération."];
-function save(){localStorage.setItem(KEY,JSON.stringify(db))}
-function toast(t){let e=document.getElementById("toast");e.textContent=t;e.style.display="block";setTimeout(()=>e.style.display="none",2300)}
-function showPage(p){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(p).classList.add("active");document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===p));render();if(p==="progress")drawChart();window.scrollTo(0,0)}
-function dayFoods(){return db.foods.filter(x=>x.date===today())}
-function totals(){return dayFoods().reduce((a,x)=>{["cal","p","c","f","fiber"].forEach(k=>a[k]+=Number(x[k]||0));return a},{cal:0,p:0,c:0,f:0,fiber:0})}
-function addWater(n){if(!n||n<1)return;db.water.push({date:today(),ml:Number(n),time:new Date().toLocaleTimeString("fr-BE",{hour:"2-digit",minute:"2-digit"})});save();render();toast("Eau ajoutée !")}
-function customWater(){addWater(Number(document.getElementById("customWater").value));document.getElementById("customWater").value=""}
-function waterTotal(){return db.water.filter(x=>x.date===today()).reduce((a,x)=>a+x.ml,0)}
-function addFood(){let name=foodName.value.trim(),qty=Number(foodQty.value),cal=Number(foodCal.value);if(!name||qty<=0||foodCal.value===""){toast("Complète le nom, la quantité et les calories");return}let factor=qty/100;db.foods.push({id:Date.now(),date:today(),name,qty,meal:mealType.value,cal:cal*factor,p:Number(foodP.value||0)*factor,c:Number(foodC.value||0)*factor,f:Number(foodF.value||0)*factor,fiber:Number(foodFiber.value||0)*factor});save();["foodName","foodCal","foodP","foodC","foodF","foodFiber"].forEach(id=>document.getElementById(id).value="");render();toast("Aliment enregistré")}
-function delItem(collection,id){db[collection]=db[collection].filter(x=>x.id!==id);save();render()}
-function addSession(){if(!sessionName.value.trim()){toast("Ajoute un nom de séance");return}db.sessions.unshift({id:Date.now(),date:today(),name:sessionName.value,details:sessionDetails.value,duration:sessionDuration.value});save();sessionName.value="";sessionDetails.value="";sessionDuration.value="";render();toast("Séance enregistrée")}
-function addWeight(){let v=Number(weightInput.value);if(v<=0){toast("Entre un poids valide");return}db.weights.push({id:Date.now(),date:weightDate.value||today(),kg:v});save();weightInput.value="";render();drawChart();toast("Poids enregistré")}
-function addMeasurements(){let o={id:Date.now(),date:today()};["arm","chest","waist","thigh"].forEach(k=>o[k]=Number(document.getElementById(k).value)||null);if(!o.arm&&!o.chest&&!o.waist&&!o.thigh){toast("Ajoute au moins une mesure");return}db.measures.unshift(o);save();render();toast("Mensurations enregistrées")}
-function saveCheckin(){db.checkins.unshift({id:Date.now(),date:today(),sleep:sleep.value,energy:energy.value,mood:mood.value,notes:notes.value});save();render();toast("Bilan enregistré")}
-function addSupplement(){db.supplements.unshift({id:Date.now(),date:today(),name:suppName.value,brand:suppBrand.value,note:suppNote.value});save();suppBrand.value="";suppNote.value="";render();toast("Ajouté au journal")}
-function saveProfile(){db.profile={name:profileName.value,age:profileAge.value,height:profileHeight.value,weight:profileWeight.value,goal:profileGoal.value,training:profileTraining.value};save();toast("Profil sauvegardé")}
-function loadProfile(){let p=db.profile||{};Object.keys({profileName:1,profileAge:1,profileHeight:1,profileWeight:1,profileGoal:1,profileTraining:1}).forEach(k=>{let key=k.replace("profile","").toLowerCase();if(p[key]!==undefined)document.getElementById(k).value=p[key]})}
-function macroBar(label,v){return `<div class="food"><div class="row"><span>${label}</span><b>${v.toFixed(1)} g</b></div></div>`}
-function render(){
- let t=totals(),w=waterTotal();homeCal.textContent=Math.round(t.cal);homeProtein.textContent=t.p.toFixed(1)+" g";homeWater.textContent=w.toLocaleString("fr-BE")+" ml";homeMeals.textContent=dayFoods().length;waterBig.textContent=w.toLocaleString("fr-BE")+" ml";waterPercent.textContent="Quantité enregistrée aujourd'hui";waterBar.style.width=Math.min(100,w/2500*100)+"%";
- macroSummary.innerHTML=macroBar("Protéines",t.p)+macroBar("Glucides",t.c)+macroBar("Lipides",t.f)+macroBar("Fibres",t.fiber);
- foodList.innerHTML=db.foods.filter(x=>x.date===today()).slice().reverse().map(x=>`<div class="food"><div class="row"><b>${esc(x.name)}</b><button class="btn danger smallbtn" onclick="delItem('foods',${x.id})">Supprimer</button></div><div class="small">${esc(x.meal)} • ${x.qty} g • ${Math.round(x.cal)} kcal • P ${x.p.toFixed(1)} g • G ${x.c.toFixed(1)} g • L ${x.f.toFixed(1)} g</div></div>`).join("")||'<div class="empty">Aucun aliment enregistré aujourd’hui.</div>';
- foodTotals.innerHTML=`${Math.round(t.cal)} kcal • Protéines ${t.p.toFixed(1)} g • Glucides ${t.c.toFixed(1)} g • Lipides ${t.f.toFixed(1)} g • Fibres ${t.fiber.toFixed(1)} g`;
- sessionList.innerHTML=db.sessions.map(x=>`<div class="food"><b>${esc(x.name)}</b><p>${x.date} • ${esc(x.duration||"?")} min<br>${esc(x.details||"Aucun détail")}</p><button class="btn danger smallbtn" onclick="delItem('sessions',${x.id})">Supprimer</button></div>`).join("")||'<div class="empty">Tes séances apparaîtront ici.</div>';
- weightList.innerHTML=db.weights.slice().reverse().map(x=>`<div class="food row"><span>${x.date}</span><b>${x.kg} kg</b><button class="btn danger smallbtn" onclick="delItem('weights',${x.id})">×</button></div>`).join("");
- measureList.innerHTML=db.measures.slice(0,8).map(x=>`<div class="food"><b>${x.date}</b><p>Bras ${x.arm||"—"} • Poitrine ${x.chest||"—"} • Taille ${x.waist||"—"} • Cuisse ${x.thigh||"—"} cm</p></div>`).join("")||'<div class="empty">Aucune mensuration.</div>';
- checkinList.innerHTML=db.checkins.slice(0,7).map(x=>`<div class="food"><b>${x.date}</b><p>Sommeil : ${esc(x.sleep||"—")} h • Énergie : ${esc(x.energy)} • Humeur : ${esc(x.mood)}<br>${esc(x.notes||"")}</p></div>`).join("");
- suppList.innerHTML=db.supplements.map(x=>`<div class="food"><div class="row"><b>${esc(x.name)}</b><button class="btn danger smallbtn" onclick="delItem('supplements',${x.id})">Supprimer</button></div><p>${x.date} • ${esc(x.brand||"")}<br>${esc(x.note||"")}</p></div>`).join("")||'<div class="empty">Ton journal est vide.</div>';
-}
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function drawChart(){let c=document.getElementById("weightChart");if(!c)return;let ctx=c.getContext("2d"),a=db.weights.slice(-12);ctx.clearRect(0,0,c.width,c.height);if(!a.length){ctx.fillStyle="#9290a6";ctx.font="16px sans-serif";ctx.fillText("Ajoute ton premier poids pour voir le graphique",12,100);return}let vals=a.map(x=>x.kg),min=Math.min(...vals)-1,max=Math.max(...vals)+1;ctx.strokeStyle="#9b78ff";ctx.lineWidth=4;ctx.beginPath();a.forEach((x,i)=>{let px=25+i*(c.width-50)/Math.max(1,a.length-1),py=c.height-25-(x.kg-min)/(max-min)*(c.height-55);i?ctx.lineTo(px,py):ctx.moveTo(px,py)});ctx.stroke();a.forEach((x,i)=>{let px=25+i*(c.width-50)/Math.max(1,a.length-1),py=c.height-25-(x.kg-min)/(max-min)*(c.height-55);ctx.fillStyle="#d47cff";ctx.beginPath();ctx.arc(px,py,6,0,Math.PI*2);ctx.fill()})}
-async function lookupBarcode(code=barcode.value.trim()){if(!code){toast("Entre un code-barres");return}scanResults.innerHTML='<p>Recherche du produit...</p>';try{let r=await fetch("https://world.openfoodfacts.org/api/v2/product/"+encodeURIComponent(code)+".json");let j=await r.json();if(j.status!==1)throw Error("Produit introuvable");showProduct(j.product)}catch(e){scanResults.innerHTML='<div class="result">Produit non trouvé. Essaie une recherche par nom ou saisis les valeurs de l’étiquette dans Nutrition.</div>'}}
-async function searchProducts(){let q=searchProduct.value.trim();if(!q)return;scanResults.innerHTML="<p>Recherche...</p>";try{let u="https://world.openfoodfacts.org/cgi/search.pl?search_terms="+encodeURIComponent(q)+"&search_simple=1&action=process&json=1&page_size=8";let r=await fetch(u);let j=await r.json();scanResults.innerHTML="";(j.products||[]).forEach(p=>productCard(p));if(!j.products?.length)scanResults.innerHTML="<p>Aucun produit trouvé.</p>"}catch(e){scanResults.innerHTML="<p>Recherche indisponible. Réessaie ou utilise la saisie manuelle.</p>"}}
-function showProduct(p){scanResults.innerHTML="";productCard(p)}
-function productCard(p){let n=p.product_name_fr||p.product_name||"Produit sans nom",z=p.nutriments||{},cal=z["energy-kcal_100g"]??(z["energy-kj_100g"]?Math.round(z["energy-kj_100g"]/4.184):0),pr=z.proteins_100g||0,ca=z.carbohydrates_100g||0,fa=z.fat_100g||0,fi=z.fiber_100g||0;let d=document.createElement("div");d.className="result";let title=document.createElement("b");title.textContent=n;let info=document.createElement("p");info.textContent=`Pour 100 g : ${cal} kcal • P ${pr} g • G ${ca} g • L ${fa} g • Fibres ${fi} g`;let b=document.createElement("button");b.className="btn smallbtn";b.textContent="Ajouter à Nutrition";b.onclick=()=>{showPage("food");foodName.value=n;foodQty.value=100;foodCal.value=cal;foodP.value=pr;foodC.value=ca;foodF.value=fa;foodFiber.value=fi;toast("Produit transféré : vérifie la quantité puis enregistre")};d.append(title,info,b);scanResults.append(d)}
-let stream=null,detector=null,scanLoop=false;
-async function startScanner(){try{if(!("BarcodeDetector" in window)){cameraStatus.textContent="Scanner caméra non pris en charge par ce navigateur. Utilise le champ code-barres ou la recherche par nom.";return}detector=new BarcodeDetector({formats:["ean_13","ean_8","upc_a","upc_e"]});stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});video.srcObject=stream;video.style.display="block";await video.play();cameraStatus.textContent="Caméra active : place le code-barres devant l'objectif.";scanLoop=true;scanFrame()}catch(e){cameraStatus.textContent="Impossible d'ouvrir la caméra. Vérifie les autorisations Safari et réessaie."}}
-async function scanFrame(){if(!scanLoop||!video.srcObject)return;try{let codes=await detector.detect(video);if(codes.length){barcode.value=codes[0].rawValue;stopScanner();lookupBarcode();return}}catch(e){}requestAnimationFrame(scanFrame)}
-function stopScanner(){scanLoop=false;if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;video.srcObject=null;video.style.display="none"}
-function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="nyzen-nutri-sauvegarde.json";a.click();URL.revokeObjectURL(a.href)}
-function importData(){let f=importFile.files[0];if(!f){toast("Choisis un fichier JSON");return}let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x||typeof x!=="object")throw Error();db=x;save();loadProfile();render();toast("Sauvegarde restaurée")}catch(e){toast("Fichier invalide")}};r.readAsText(f)}
-init();
-</script>
- 
-<style>
-#nz-water-launch{position:fixed;right:15px;bottom:100px;z-index:50;background:linear-gradient(135deg,#9b78ff,#c36be7);color:white;border:0;border-radius:18px;padding:15px 19px;font-weight:900;box-shadow:0 5px 25px #9b78ff55}
-#nz-water-panel,#nz-onboard{position:fixed;inset:0;background:#080810ee;z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
-.nz-modal{background:#171725;border:1px solid #39334f;border-radius:22px;padding:20px;width:100%;max-width:480px;max-height:88vh;overflow:auto;color:white}
-.nz-modal h2{font-size:23px}.nz-modal p{color:#aaa}
-.nz-modal label{display:block;color:#aaa;font-size:12px;margin:13px 0 6px}
-.nz-modal input,.nz-modal select,.nz-modal textarea{width:100%;padding:12px;border-radius:10px;background:#0b0b14;border:1px solid #39334f;color:white}
-.nz-modal button{margin-top:12px}
-.nz-water-number{font-size:37px;font-weight:900;color:#b99cff;margin:12px 0}
-.nz-actions{display:flex;gap:8px;flex-wrap:wrap}
-.nz-actions button{flex:1}
-.nz-step{display:none}.nz-step.active{display:block}
-</style>
-
-<button id="nz-water-launch" onclick="nzWaterOpen()">💧 EAU</button>
-
-<div id="nz-water-panel">
- <div class="nz-modal">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-   <h2>Hydratation</h2>
-   <button class="btn secondary" onclick="nzWaterClose()">✕</button>
-  </div>
-  <p>Ton suivi d'eau quotidien</p>
-  <div class="nz-water-number" id="nz-water-total">0 ml</div>
-  <div class="progress"><div id="nz-water-progress"></div></div>
-  <p id="nz-water-history"></p>
-  <div class="nz-actions">
-   <button class="btn secondary" onclick="nzAddWater(150)">+150 ml</button>
-   <button class="btn secondary" onclick="nzAddWater(250)">+250 ml</button>
-   <button class="btn secondary" onclick="nzAddWater(500)">+500 ml</button>
-  </div>
-  <label>Quantité personnalisée (ml)</label>
-  <input type="number" id="nz-water-custom" placeholder="Ex : 350">
-  <button class="btn" style="width:100%" onclick="nzAddCustomWater()">Ajouter</button>
-  <p>Ton historique est conservé automatiquement sur cet appareil. Le repère de 2500 ml est indicatif, pas une obligation : les besoins varient selon les personnes et les journées.</p>
- </div>
-</div>
-
-<div id="nz-onboard">
- <div class="nz-modal">
+<div class="overlay" id="onboarding">
+ <div class="modal">
   <div class="logo">NYZEN <span>NUTRI</span></div>
-  <h2>Bienvenue dans ton espace.</h2>
-  <p>On va construire ton profil pour adapter ton suivi à tes habitudes et à tes entraînements.</p>
-  <div id="nz-step-label" class="tag">ÉTAPE 1 / 4</div>
-
-  <div class="nz-step active" id="nz-step-1">
-   <h2>Ton profil</h2>
-   <label>Ton prénom ou pseudo</label>
-   <input id="nz-name" placeholder="Comment t'appelles-tu ?">
-   <label>Âge (minimum 17 ans)</label>
-   <input id="nz-age" type="number" min="17" placeholder="17 ou plus">
-   <label>Taille en cm</label>
-   <input id="nz-height" type="number" placeholder="Ex : 175">
-   <label>Poids actuel en kg</label>
-   <input id="nz-weight" type="number" step=".1" placeholder="Ex : 65">
-   <label>Ton expérience en salle</label>
-   <select id="nz-experience">
-    <option>Débutant</option><option>Intermédiaire</option><option>Avancé</option>
-   </select>
+  <div class="stepdots" id="dots"></div>
+  <div class="step active" id="step1">
+   <h2>Bienvenue. Commençons par toi.</h2>
+   <p>Ces informations servent à personnaliser ton espace.</p>
+   <label>Ton prénom ou pseudo</label><input id="oName" placeholder="Ton prénom">
+   <label>Ton âge (17 ans minimum)</label><input id="oAge" type="number" min="17" placeholder="17">
+   <div class="formgrid">
+    <div><label>Taille (cm)</label><input id="oHeight" type="number" placeholder="175"></div>
+    <div><label>Poids (kg)</label><input id="oWeight" type="number" step=".1" placeholder="65"></div>
+   </div>
+   <label>Expérience en musculation</label><select id="oExperience"><option>Débutant</option><option>Intermédiaire</option><option>Avancé</option></select>
   </div>
-
-  <div class="nz-step" id="nz-step-2">
-   <h2>Ton objectif</h2>
-   <label>Objectif principal</label>
-   <select id="nz-goal">
-    <option>Prise de muscle</option>
-    <option>Maintien et forme</option>
-    <option>Améliorer mes habitudes</option>
-    <option>Développer ma force</option>
-   </select>
-   <label>Nombre d'entraînements par semaine</label>
-   <select id="nz-frequency">
-    <option>1 à 2 fois</option><option>3 fois</option>
-    <option selected>4 à 5 fois</option><option>6 fois ou plus</option>
-   </select>
-   <label>Durée moyenne d'une séance</label>
-   <select id="nz-duration">
-    <option>Moins de 45 minutes</option><option>45 à 60 minutes</option>
-    <option>1 h à 1 h 30</option><option>Plus de 1 h 30</option>
-   </select>
-   <label>Type d'entraînement</label>
-   <select id="nz-sport">
-    <option>Musculation</option><option>Musculation et cardio</option>
-    <option>Fitness</option><option>Autre</option>
-   </select>
-   <label>Jours habituels d'entraînement</label>
-   <input id="nz-days" placeholder="Ex : lundi, mardi, jeudi, samedi">
+  <div class="step" id="step2">
+   <h2>Ton objectif sportif</h2>
+   <label>Objectif principal</label><select id="oGoal"><option>Prise de muscle</option><option>Maintien et forme</option><option>Améliorer mes habitudes</option><option>Développer ma force</option></select>
+   <label>Combien de séances par semaine ?</label><select id="oTraining"><option>1 à 2 fois</option><option>3 fois</option><option selected>4 à 5 fois</option><option>6 fois ou plus</option></select>
+   <label>Durée moyenne des séances</label><select id="oDuration"><option>Moins de 45 min</option><option>45 à 60 min</option><option>1 h à 1 h 30</option><option>Plus de 1 h 30</option></select>
+   <label>Type de sport</label><select id="oSport"><option>Musculation</option><option>Musculation et cardio</option><option>Fitness</option><option>Autre</option></select>
+   <label>Jours habituels</label><input id="oDays" placeholder="Lundi, mardi, jeudi...">
   </div>
-
-  <div class="nz-step" id="nz-step-3">
+  <div class="step" id="step3">
    <h2>Ton alimentation</h2>
-   <label>Combien de repas par jour ?</label>
-   <select id="nz-meals">
-    <option>2 repas</option><option selected>3 repas</option>
-    <option>4 repas</option><option>5 repas ou plus</option>
-   </select>
-   <label>Ton alimentation habituelle</label>
-   <select id="nz-diet">
-    <option>Variée</option><option>Végétarienne</option>
-    <option>Végétalienne</option><option>Autre</option>
-   </select>
-   <label>Allergies ou intolérances alimentaires</label>
-   <input id="nz-allergies" placeholder="Ex : lactose, arachides, aucune...">
-   <label>Aliments que tu aimes particulièrement</label>
-   <input id="nz-favorites" placeholder="Ex : poulet, riz, œufs...">
-   <label>Aliments que tu évites</label>
-   <input id="nz-avoid" placeholder="Facultatif">
-   <label>Utilises-tu des compléments ?</label>
-   <select id="nz-supplements">
-    <option>Non</option><option>Whey</option><option>Créatine</option>
-    <option>Whey et créatine</option><option>Autres compléments</option>
-   </select>
+   <label>Nombre de repas habituels</label><select id="oMeals"><option>2 repas</option><option selected>3 repas</option><option>4 repas</option><option>5 repas ou plus</option></select>
+   <label>Type d'alimentation</label><select id="oDiet"><option>Variée</option><option>Végétarienne</option><option>Végétalienne</option><option>Autre</option></select>
+   <label>Allergies et intolérances</label><input id="oAllergies" placeholder="Lactose, arachides, aucune...">
+   <label>Aliments que tu aimes</label><input id="oFavorites" placeholder="Poulet, riz, œufs...">
+   <label>Aliments que tu évites</label><input id="oAvoid" placeholder="Facultatif">
+   <label>Compléments utilisés</label><select id="oSupplements"><option>Aucun</option><option>Whey</option><option>Créatine</option><option>Whey et créatine</option><option>Autres</option></select>
   </div>
-
-  <div class="nz-step" id="nz-step-4">
+  <div class="step" id="step4">
    <h2>Ton quotidien</h2>
-   <label>Sommeil moyen par nuit</label>
-   <select id="nz-sleep">
-    <option>Moins de 6 h</option><option>6 à 7 h</option>
-    <option>7 à 8 h</option><option>8 à 9 h</option><option>Plus de 9 h</option>
-   </select>
-   <label>Ton hydratation habituelle</label>
-   <select id="nz-hydration">
-    <option>Moins d'un litre</option><option>1 à 1,5 litre</option>
-    <option>1,5 à 2 litres</option><option>Plus de 2 litres</option>
-    <option>Je ne sais pas</option>
-   </select>
-   <label>Ton niveau d'énergie habituel</label>
-   <select id="nz-energy">
-    <option>Faible</option><option>Moyen</option><option>Bon</option>
-   </select>
-   <label>Ce que tu veux améliorer en priorité</label>
-   <textarea id="nz-priority" rows="3" placeholder="Ex : régularité, repas, progression en salle..."></textarea>
-   <p>Ton profil sert à personnaliser ton suivi. Il ne remplace pas un avis médical ou diététique. Pas de régime extrême ni de promesse de transformation rapide.</p>
+   <label>Sommeil habituel</label><select id="oSleep"><option>Moins de 6 h</option><option>6 à 7 h</option><option>7 à 8 h</option><option>8 à 9 h</option><option>Plus de 9 h</option></select>
+   <label>Hydratation habituelle</label><select id="oHydration"><option>Moins d'un litre</option><option>1 à 1,5 litre</option><option>1,5 à 2 litres</option><option>Plus de 2 litres</option><option>Je ne sais pas</option></select>
+   <label>Énergie habituelle</label><select id="oEnergy"><option>Faible</option><option>Moyenne</option><option>Bonne</option></select>
+   <label>Priorité à améliorer</label><textarea id="oPriority" rows="3" placeholder="Régularité, sommeil, repas, progression..."></textarea>
+   <p>Ton profil personnalise le suivi. Il ne remplace pas les conseils d'un médecin ou diététicien. NYZEN ne propose pas de régime extrême ni de perte de poids rapide.</p>
   </div>
-
-  <div class="nz-actions">
-   <button class="btn secondary" id="nz-back" onclick="nzStep(-1)" style="display:none">Retour</button>
-   <button class="btn" id="nz-next" onclick="nzStep(1)" style="width:100%">Continuer</button>
+  <div class="row" style="margin-top:15px">
+   <button class="btn secondary" id="backBtn" onclick="stepMove(-1)" style="display:none">Retour</button>
+   <button class="btn" id="nextBtn" onclick="stepMove(1)" style="flex:1">Continuer</button>
   </div>
  </div>
 </div>
 
 <script>
-let nzCurrentStep=1;
-
-function nzReadDB(){
- try{return JSON.parse(localStorage.getItem("nyzen_nutri_v2")||"{}")}
- catch(e){return {}}
+"use strict";
+const DBKEY="nyzen_nutri_v3";
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toLocaleDateString("en-CA");
+let db={};
+function load(){
+ try{db=JSON.parse(localStorage.getItem(DBKEY)||"{}")}catch(e){db={}}
+ ["foods","water","sessions","weights","measures","supplements","checkins","habits"].forEach(k=>{if(!Array.isArray(db[k]))db[k]=[]});
+ db.profile=db.profile||{};
 }
-function nzSaveDB(data){
- localStorage.setItem("nyzen_nutri_v2",JSON.stringify(data));
+function save(){localStorage.setItem(DBKEY,JSON.stringify(db))}
+function msg(t){$("toast").textContent=t;$("toast").style.display="block";setTimeout(()=>$("toast").style.display="none",2400)}
+function val(id){return $(id).value.trim()}
+function number(id){return Number($(id).value)||0}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function go(page){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ $(page).classList.add("active");
+ document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("active",x.dataset.id===page));
+ render();window.scrollTo(0,0);
 }
-function nzWaterOpen(){
- document.getElementById("nz-water-panel").style.display="flex";
- nzWaterRender();
+const tips=[
+ "La régularité compte plus qu'une journée parfaite.",
+ "Le repos fait partie intégrante de ta progression.",
+ "Prends le temps de bien t'échauffer avant une séance.",
+ "Varie tes aliments pour profiter de différents nutriments.",
+ "Note tes performances pour suivre ton évolution.",
+ "Écoute ton corps : une douleur inhabituelle mérite de l'attention.",
+ "Le sommeil aide ton corps à récupérer après l'entraînement.",
+ "Hydrate-toi régulièrement au fil de la journée."
+];
+function currentFoods(){return db.foods.filter(x=>x.date===($("foodDate").value||today()))}
+function totals(){
+ return currentFoods().reduce((a,x)=>{["cal","p","c","f","fiber"].forEach(k=>a[k]+=Number(x[k]||0));return a},{cal:0,p:0,c:0,f:0,fiber:0});
 }
-function nzWaterClose(){
- document.getElementById("nz-water-panel").style.display="none";
+function addFood(){
+ let name=val("fName"),qty=number("fQty");
+ if(!name||qty<=0||$("fCal").value===""){msg("Complète le nom, la quantité et les calories.");return}
+ let factor=qty/100;
+ db.foods.push({id:Date.now(),date:$("foodDate").value||today(),name,qty,meal:$("fMeal").value,cal:number("fCal")*factor,p:number("fP")*factor,c:number("fC")*factor,f:number("fF")*factor,fiber:number("fFiber")*factor});
+ save();["fName","fCal","fP","fC","fF","fFiber"].forEach(k=>$(k).value="");render();msg("Aliment enregistré.");
 }
-function nzAddWater(amount){
- amount=Number(amount);
- if(!Number.isFinite(amount)||amount<=0||amount>5000)return;
- let data=nzReadDB();
- data.water=data.water||[];
- data.water.push({
-  date:new Date().toLocaleDateString("en-CA"),
-  ml:amount,
-  time:new Date().toLocaleTimeString("fr-BE",{hour:"2-digit",minute:"2-digit"})
- });
- nzSaveDB(data);
- nzWaterRender();
- if(typeof render==="function")render();
+function deleteEntry(key,id){db[key]=db[key].filter(x=>x.id!==id);save();render()}
+function waterToday(){return db.water.filter(x=>x.date===today()).reduce((a,x)=>a+Number(x.ml||0),0)}
+function addWater(n){
+ n=Number(n);if(!Number.isFinite(n)||n<=0||n>5000){msg("Quantité invalide.");return}
+ db.water.push({id:Date.now(),date:today(),ml:n,time:new Date().toLocaleTimeString("fr-BE",{hour:"2-digit",minute:"2-digit"})});
+ save();render();msg(n+" ml ajoutés.");
 }
-function nzAddCustomWater(){
- let input=document.getElementById("nz-water-custom");
- nzAddWater(input.value);
- input.value="";
+function addCustomWater(){addWater(number("waterCustom"));$("waterCustom").value=""}
+function addTraining(){
+ if(!val("tName")){msg("Donne un nom à ta séance.");return}
+ db.sessions.unshift({id:Date.now(),date:today(),name:val("tName"),exercises:val("tExercises"),duration:val("tDuration"),feeling:$("tFeeling").value});
+ save();["tName","tExercises","tDuration"].forEach(k=>$(k).value="");render();msg("Séance enregistrée.");
 }
-function nzWaterRender(){
- let data=nzReadDB();
- let date=new Date().toLocaleDateString("en-CA");
- let entries=(data.water||[]).filter(x=>x.date===date);
- let total=entries.reduce((sum,x)=>sum+Number(x.ml||0),0);
- document.getElementById("nz-water-total").textContent=total.toLocaleString("fr-BE")+" ml";
- document.getElementById("nz-water-progress").style.width=Math.min(100,total/2500*100)+"%";
- document.getElementById("nz-water-history").textContent=
- entries.length ? entries.map(x=>x.time+" : "+x.ml+" ml").join(" • ") : "Aucune eau enregistrée aujourd'hui.";
+function addWeight(){
+ let kg=number("weightInput");if(kg<=0){msg("Entre un poids valide.");return}
+ db.weights.push({id:Date.now(),date:$("weightDate").value||today(),kg});save();$("weightInput").value="";render();drawChart();msg("Poids enregistré.");
 }
-function nzStep(direction){
- if(direction===1 && nzCurrentStep===1){
-  let age=Number(document.getElementById("nz-age").value);
-  if(!Number.isFinite(age)||age<17){
-   alert("L'âge minimum pour créer un profil NYZEN NUTRI est de 17 ans.");
-   return;
-  }
-  if(!document.getElementById("nz-height").value||!document.getElementById("nz-weight").value){
-   alert("Complète ta taille et ton poids.");
-   return;
-  }
+function addMeasure(){
+ let x={id:Date.now(),date:today(),arm:number("mArm")||null,chest:number("mChest")||null,waist:number("mWaist")||null,thigh:number("mThigh")||null};
+ if(!x.arm&&!x.chest&&!x.waist&&!x.thigh){msg("Ajoute au moins une mensuration.");return}
+ db.measures.unshift(x);save();render();msg("Mensurations enregistrées.");
+}
+function addCheckin(){
+ db.checkins.unshift({id:Date.now(),date:today(),sleep:val("cSleep"),energy:$("cEnergy").value,mood:$("cMood").value,note:val("cNote")});
+ save();render();msg("Bilan enregistré.");
+}
+function addSupplement(){
+ db.supplements.unshift({id:Date.now(),date:today(),name:$("sName").value,brand:val("sBrand"),note:val("sNote")});
+ save();$("sBrand").value="";$("sNote").value="";render();msg("Complément ajouté au journal.");
+}
+function saveProfile(){
+ let age=number("pAge");
+ if(age<17){msg("L'âge minimum est de 17 ans inclus.");return}
+ db.profile={...db.profile,name:val("pName"),age,height:val("pHeight"),weight:val("pWeight"),experience:$("pExperience").value,goal:$("pGoal").value,training:$("pTraining").value,meals:$("pMeals").value,diet:$("pDiet").value,allergies:val("pAllergies"),favorites:val("pFavorites"),avoid:val("pAvoid"),sleep:$("pSleep").value,hydration:$("pHydration").value,priority:val("pPriority"),onboard:true};
+ save();render();msg("Profil mis à jour.");
+}
+function fillProfile(){
+ let p=db.profile;
+ const map={pName:"name",pAge:"age",pHeight:"height",pWeight:"weight",pExperience:"experience",pGoal:"goal",pTraining:"training",pMeals:"meals",pDiet:"diet",pAllergies:"allergies",pFavorites:"favorites",pAvoid:"avoid",pSleep:"sleep",pHydration:"hydration",pPriority:"priority"};
+ Object.entries(map).forEach(([id,key])=>{if(p[key]!==undefined)$(id).value=p[key]});
+}
+function stepMove(dir){
+ let s=Number(db.step||1);
+ if(dir>0&&s===1){
+  let age=number("oAge");
+  if(age<17){alert("Tu dois avoir au moins 17 ans pour créer ton profil.");return}
+  if(!number("oHeight")||!number("oWeight")){alert("Complète ta taille et ton poids.");return}
  }
- nzCurrentStep+=direction;
- nzCurrentStep=Math.max(1,Math.min(4,nzCurrentStep));
- for(let i=1;i<=4;i++){
-  document.getElementById("nz-step-"+i).classList.toggle("active",i===nzCurrentStep);
- }
- document.getElementById("nz-step-label").textContent="ÉTAPE "+nzCurrentStep+" / 4";
- document.getElementById("nz-back").style.display=nzCurrentStep===1?"none":"block";
- let next=document.getElementById("nz-next");
- next.textContent=nzCurrentStep===4?"Terminer mon inscription":"Continuer";
- next.onclick=nzCurrentStep===4?nzFinish:()=>nzStep(1);
+ s=Math.max(1,Math.min(4,s+dir));db.step=s;
+ for(let i=1;i<=4;i++)$("step"+i).classList.toggle("active",i===s);
+ $("dots").innerHTML=[1,2,3,4].map(i=>`<span class="${i<=s?"on":""}"></span>`).join("");
+ $("backBtn").style.display=s===1?"none":"block";
+ $("nextBtn").textContent=s===4?"Terminer mon inscription":"Continuer";
 }
-function nzFinish(){
- let data=nzReadDB();
- data.profile={
-  ...(data.profile||{}),
-  name:document.getElementById("nz-name").value,
-  age:document.getElementById("nz-age").value,
-  height:document.getElementById("nz-height").value,
-  weight:document.getElementById("nz-weight").value,
-  experience:document.getElementById("nz-experience").value,
-  goal:document.getElementById("nz-goal").value,
-  training:document.getElementById("nz-frequency").value,
-  duration:document.getElementById("nz-duration").value,
-  sport:document.getElementById("nz-sport").value,
-  days:document.getElementById("nz-days").value,
-  meals:document.getElementById("nz-meals").value,
-  diet:document.getElementById("nz-diet").value,
-  allergies:document.getElementById("nz-allergies").value,
-  favorites:document.getElementById("nz-favorites").value,
-  avoid:document.getElementById("nz-avoid").value,
-  supplements:document.getElementById("nz-supplements").value,
-  sleep:document.getElementById("nz-sleep").value,
-  hydration:document.getElementById("nz-hydration").value,
-  energy:document.getElementById("nz-energy").value,
-  priority:document.getElementById("nz-priority").value,
-  onboardingDone:true
+function finishOnboarding(){
+ let age=number("oAge");
+ if(age<17){alert("L'âge minimum est de 17 ans inclus.");return}
+ db.profile={
+  name:val("oName"),age,height:val("oHeight"),weight:val("oWeight"),
+  experience:$("oExperience").value,goal:$("oGoal").value,training:$("oTraining").value,
+  duration:$("oDuration").value,sport:$("oSport").value,days:val("oDays"),
+  meals:$("oMeals").value,diet:$("oDiet").value,allergies:val("oAllergies"),
+  favorites:val("oFavorites"),avoid:val("oAvoid"),supplements:$("oSupplements").value,
+  sleep:$("oSleep").value,hydration:$("oHydration").value,energy:$("oEnergy").value,
+  priority:val("oPriority"),onboard:true
  };
- nzSaveDB(data);
- document.getElementById("nz-onboard").style.display="none";
- alert("Bienvenue dans NYZEN NUTRI !");
- location.reload();
+ db.step=1;save();$("onboarding").style.display="none";fillProfile();render();msg("Bienvenue dans NYZEN NUTRI !");
 }
-(function(){
- let data=nzReadDB();
- if(!data.profile?.onboardingDone){
-  document.getElementById("nz-onboard").style.display="flex";
- }
- nzWaterRender();
-})();
+async function searchFoods(){
+ let q=val("productSearch");if(!q)return;
+ $("productResults").innerHTML="<p>Recherche...</p>";
+ try{
+  let u="https://world.openfoodfacts.org/cgi/search.pl?search_terms="+encodeURIComponent(q)+"&search_simple=1&action=process&json=1&page_size=8";
+  let r=await fetch(u),j=await r.json();$("productResults").innerHTML="";
+  (j.products||[]).forEach(p=>productCard(p,"productResults"));
+  if(!j.products?.length)$("productResults").innerHTML="<p>Aucun produit trouvé.</p>";
+ }catch(e){$("productResults").innerHTML="<p>Recherche indisponible. Réessaie plus tard.</p>"}
+}
+async function lookupBarcode(){
+ let code=val("barcodeInput");if(!code)return;
+ $("barcodeResult").innerHTML="<p>Recherche du produit...</p>";
+ try{
+  let r=await fetch("https://world.openfoodfacts.org/api/v2/product/"+encodeURIComponent(code)+".json");
+  let j=await r.json();if(j.status!==1)throw Error();
+  $("barcodeResult").innerHTML="";productCard(j.product,"barcodeResult");
+ }catch(e){$("barcodeResult").innerHTML="<p>Produit introuvable. Tu peux le rechercher par nom ou saisir ses valeurs manuellement.</p>"}
+}
+async function scannerSearch(){
+ let q=val("scannerSearch");if(!q)return;
+ $("scannerResults").innerHTML="<p>Recherche...</p>";
+ try{
+  let r=await fetch("https://world.openfoodfacts.org/cgi/search.pl?search_terms="+encodeURIComponent(q)+"&search_simple=1&action=process&json=1&page_size=8");
+  let j=await r.json();$("scannerResults").innerHTML="";
+  (j.products||[]).forEach(p=>productCard(p,"scannerResults"));
+ }catch(e){$("scannerResults").innerHTML="<p>Recherche indisponible.</p>"}
+}
+function productCard(p,target){
+ let n=p.product_name_fr||p.product_name||"Produit sans nom",z=p.nutriments||{};
+ let cal=z["energy-kcal_100g"]??(z["energy-kj_100g"]?Math.round(z["energy-kj_100g"]/4.184):0);
+ let pr=z.proteins_100g||0,ca=z.carbohydrates_100g||0,fa=z.fat_100g||0,fi=z.fiber_100g||0;
+ let d=document.createElement("div");d.className="card";
+ let name=document.createElement("b");name.textContent=n;
+ let desc=document.createElement("p");desc.textContent=`Pour 100 g : ${cal} kcal • P ${pr} g • G ${ca} g • L ${fa} g • Fibres ${fi} g`;
+ let b=document.createElement("button");b.className="btn mini";b.textContent="Ajouter à mes aliments";
+ b.onclick=()=>{go("nutrition");$("fName").value=n;$("fQty").value=100;$("fCal").value=cal;$("fP").value=pr;$("fC").value=ca;$("fF").value=fa;$("fFiber").value=fi;msg("Produit transféré. Vérifie les informations avant de l'enregistrer.")};
+ d.append(name,desc,b);$(target).append(d);
+}
+let cameraStream=null,detector=null,cameraActive=false;
+async function startCamera(){
+ if(!("BarcodeDetector" in window)){ $("cameraInfo").textContent="La lecture caméra n'est pas prise en charge ici. Utilise le champ code-barres.";return}
+ try{
+  detector=new BarcodeDetector({formats:["ean_13","ean_8","upc_a","upc_e"]});
+  cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});
+  $("camera").srcObject=cameraStream;$("camera").style.display="block";await $("camera").play();
+  cameraActive=true;$("cameraInfo").textContent="Caméra active : présente le code-barres devant l'objectif.";
+  scanFrame();
+ }catch(e){$("cameraInfo").textContent="Caméra inaccessible. Vérifie les autorisations du navigateur."}
+}
+async function scanFrame(){
+ if(!cameraActive)return;
+ try{
+  let codes=await detector.detect($("camera"));
+  if(codes.length){$("barcodeInput").value=codes[0].rawValue;stopCamera();lookupBarcode();return}
+ }catch(e){}
+ if(cameraActive)requestAnimationFrame(scanFrame);
+}
+function stopCamera(){
+ cameraActive=false;
+ if(cameraStream)cameraStream.getTracks().forEach(t=>t.stop());
+ cameraStream=null;$("camera").srcObject=null;$("camera").style.display="none";
+}
+function drawChart(){
+ let c=$("weightChart"),ctx=c.getContext("2d"),a=db.weights.slice().sort((x,y)=>x.date.localeCompare(y.date)).slice(-12);
+ ctx.clearRect(0,0,c.width,c.height);
+ if(!a.length){ctx.fillStyle="#999";ctx.font="16px sans-serif";ctx.fillText("Ajoute un poids pour voir ta courbe.",15,110);return}
+ let v=a.map(x=>x.kg),min=Math.min(...v)-1,max=Math.max(...v)+1;
+ ctx.strokeStyle="#a58aff";ctx.lineWidth=4;ctx.beginPath();
+ a.forEach((x,i)=>{let px=25+i*(c.width-50)/Math.max(1,a.length-1),py=c.height-25-(x.kg-min)/(max-min)*(c.height-55);i?ctx.lineTo(px,py):ctx.moveTo(px,py)});
+ ctx.stroke();
+ a.forEach((x,i)=>{let px=25+i*(c.width-50)/Math.max(1,a.length-1),py=c.height-25-(x.kg-min)/(max-min)*(c.height-55);ctx.fillStyle="#d28cff";ctx.beginPath();ctx.arc(px,py,6,0,Math.PI*2);ctx.fill()});
+}
+function render(){
+ let t=totals(),w=waterToday();
+ $("dashCal").textContent=Math.round(t.cal);$("dashProtein").textContent=t.p.toFixed(1)+" g";$("dashCarbs").textContent=t.c.toFixed(1)+" g";$("dashFat").textContent=t.f.toFixed(1)+" g";
+ $("dashWater").textContent=w.toLocaleString("fr-BE")+" ml";$("dashWaterBar").style.width=Math.min(100,w/2500*100)+"%";
+ $("dashWaterText").textContent=db.water.filter(x=>x.date===today()).length+" ajout(s) aujourd'hui.";
+ $("dashMacros").innerHTML=`<div class="foodrow">Protéines <b>${t.p.toFixed(1)} g</b></div><div class="foodrow">Glucides <b>${t.c.toFixed(1)} g</b></div><div class="foodrow">Lipides <b>${t.f.toFixed(1)} g</b></div><div class="foodrow">Fibres <b>${t.fiber.toFixed(1)} g</b></div>`;
+ $("foodList").innerHTML=currentFoods().slice().reverse().map(x=>`<div class="foodrow"><div class="row"><b>${esc(x.name)}</b><button class="btn danger mini" onclick="deleteEntry('foods',${x.id})">Supprimer</button></div><small>${esc(x.meal)} • ${x.qty} g/ml • ${Math.round(x.cal)} kcal • P ${x.p.toFixed(1)} g • G ${x.c.toFixed(1)} g • L ${x.f.toFixed(1)} g</small></div>`).join("")||'<div class="empty">Aucun aliment enregistré pour cette date.</div>';
+ $("foodTotals").textContent=`Total : ${Math.round(t.cal)} kcal • Protéines ${t.p.toFixed(1)} g • Glucides ${t.c.toFixed(1)} g • Lipides ${t.f.toFixed(1)} g • Fibres ${t.fiber.toFixed(1)} g`;
+ $("foodProgress").style.width=Math.min(100,t.cal/2500*100)+"%";
+ $("waterTotal").textContent=w.toLocaleString("fr-BE")+" ml";$("waterProgress").style.width=Math.min(100,w/2500*100)+"%";
+ let wh=db.water.filter(x=>x.date===today());
+ $("waterHistory").innerHTML=wh.slice().reverse().map(x=>`<div class="foodrow row"><span>${esc(x.time)}</span><b>${x.ml} ml</b><button class="btn danger mini" onclick="deleteEntry('water',${x.id})">×</button></div>`).join("")||'<div class="empty">Aucune boisson enregistrée aujourd’hui.</div>';
+ $("waterWeek").innerHTML=Array.from({length:7},(_,i)=>{let d=new Date();d.setDate(d.getDate()-i);let k=d.toLocaleDateString("en-CA"),v=db.water.filter(x=>x.date===k).reduce((a,x)=>a+x.ml,0);return `<div class="foodrow row"><span>${d.toLocaleDateString("fr-BE",{weekday:"short",day:"numeric"})}</span><b>${v.toLocaleString("fr-BE")} ml</b></div>`}).join("");
+ $("trainingHistory").innerHTML=db.sessions.map(x=>`<div class="foodrow"><div class="row"><b>${esc(x.name)}</b><button class="btn danger mini" onclick="deleteEntry('sessions',${x.id})">×</button></div><p>${x.date} • ${esc(x.duration||"—")} min • ${esc(x.feeling)}<br>${esc(x.exercises)}</p></div>`).join("")||'<div class="empty">Tes séances apparaîtront ici.</div>';
+ $("weightHistory").innerHTML=db.weights.slice().reverse().map(x=>`<div class="foodrow row"><span>${x.date}</span><b>${x.kg} kg</b><button class="btn danger mini" onclick="deleteEntry('weights',${x.id})">×</button></div>`).join("");
+ $("measureHistory").innerHTML=db.measures.slice(0,10).map(x=>`<div class="foodrow"><b>${x.date}</b><p>Bras ${x.arm||"—"} • Poitrine ${x.chest||"—"} • Taille ${x.waist||"—"} • Cuisse ${x.thigh||"—"} cm</p></div>`).join("")||'<div class="empty">Aucune mensuration.</div>';
+ $("checkinHistory").innerHTML=db.checkins.slice(0,10).map(x=>`<div class="foodrow"><b>${x.date}</b><p>Sommeil ${esc(x.sleep||"—")} h • ${esc(x.energy)} • ${esc(x.mood)}<br>${esc(x.note)}</p></div>`).join("");
+ $("supplementHistory").innerHTML=db.supplements.map(x=>`<div class="foodrow"><div class="row"><b>${esc(x.name)}</b><button class="btn danger mini" onclick="deleteEntry('supplements',${x.id})">×</button></div><p>${x.date} • ${esc(x.brand)}<br>${esc(x.note)}</p></div>`).join("")||'<div class="empty">Ton journal de compléments est vide.</div>';
+ $("welcomeText").textContent=db.profile.name?"Bienvenue "+db.profile.name+". Continue à construire tes habitudes.":"Une meilleure routine commence aujourd'hui.";
+ $("dailyTip").textContent=tips[new Date().getDate()%tips.length];
+ $("habitList").innerHTML=["Boire régulièrement","Manger des repas variés","Consommer des fruits et légumes","Bien récupérer","M'échauffer avant le sport","Écouter les signaux de mon corps"].map((x,i)=>`<label style="display:flex;align-items:center;gap:10px;color:white"><input type="checkbox" style="width:18px" id="habit${i}" ${db.habits.includes(today()+"-"+i)?"checked":""}>${x}</label>`).join("");
+ if($("progress").classList.contains("active"))drawChart();
+}
+function saveHabits(){
+ for(let i=0;i<6;i++){let k=today()+"-"+i;db.habits=db.habits.filter(x=>x!==k);if($("habit"+i).checked)db.habits.push(k)}
+ save();msg("Habitudes sauvegardées.");
+}
+function exportData(){
+ let b=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),a=document.createElement("a");
+ a.href=URL.createObjectURL(b);a.download="nyzen-nutri-backup.json";a.click();URL.revokeObjectURL(a.href);
+}
+function importData(){
+ let f=$("importInput").files[0];if(!f){msg("Sélectionne un fichier JSON.");return}
+ let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x||typeof x!=="object")throw Error();db=x;save();location.reload()}catch(e){msg("Fichier de sauvegarde invalide.")}};r.readAsText(f);
+}
+function init(){
+ load();
+ $("headerDate").textContent=new Date().toLocaleDateString("fr-BE",{weekday:"short",day:"numeric",month:"short"});
+ $("foodDate").value=today();$("weightDate").value=today();
+ fillProfile();
+ $("dots").innerHTML=[1,2,3,4].map((x,i)=>`<span class="${i===0?"on":""}"></span>`).join("");
+ $("nextBtn").onclick=()=>{if(Number(db.step||1)===4)finishOnboarding();else stepMove(1)};
+ if(!db.profile.onboard)$("onboarding").style.display="flex";
+ render();
+}
+init();
 </script>
 </body>
 </html>
