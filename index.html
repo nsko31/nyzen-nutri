@@ -201,7 +201,7 @@ function calcEnergy(p){
  const age=Number(p.age),w=Number(p.weight),h=Number(p.height)/100,sex=p.sex,pa=Number(p.activity)||1.375;
  if(!sex||!age||!w||!h)return {kcal:0,method:'Renseigne le sexe, l’âge, la taille et le poids pour obtenir une estimation.'};
  if(age<19){
-  const factors=sex==='male'?{1.2:1.0,1.375:1.13,1.55:1.26,1.725:1.42,1.9:1.42}:{1.2:1.0,1.375:1.16,1.55:1.31,1.725:1.56,1.9:1.56};
+  const factors=sex==='male'?{'1.2':1.0,'1.375':1.13,'1.55':1.26,'1.725':1.42,'1.9':1.42}:{'1.2':1.0,'1.375':1.16,'1.55':1.31,'1.725':1.56,'1.9':1.56};
   const a=factors[pa]||1.13;
   const kcal=sex==='male'?(88.5-61.9*age+a*(26.7*w+903*h)+25):(135.3-30.8*age+a*(10*w+934*h)+25);
   return {kcal:Math.round(kcal),method:'Équation EER adaptée aux 9–18 ans, selon le sexe, l’âge, la taille, le poids et l’activité.'};
